@@ -1,0 +1,30 @@
+import { Head, Html, Main, NextScript } from 'next/document'
+
+export default function Document(props) {
+  let pageProps = props.__NEXT_DATA__?.props?.pageProps
+  
+  return (
+    <Html
+      className="w-full h-full scroll-smooth bg-zinc-900 antialiased p-0 m-0 [font-feature-settings:'ss01']"
+      lang="en"
+    >
+      <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Lexend:wght@400;500&display=swap"
+        />
+      </Head>
+      <body className="m-0 p-0 w-full min-h-full">
+        <Main />
+        <NextScript />
+
+      </body>
+    </Html>
+  )
+}

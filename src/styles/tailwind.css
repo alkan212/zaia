@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+#__next {
+  min-height: 100vh;
+  height:100vh;
+}
+
+
+.scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Track */
+.scrollbar::-webkit-scrollbar-track {
+  background: #f6f6f6;
+}
+
+/* Handle */
+.scrollbar::-webkit-scrollbar-thumb {
+  background: rgb(158, 158, 158);
+}
+
+/* Handle on hover */
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.unselectable {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.montserrat{
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+
+@layer utilities {
+  .bg-black-50 {
+    background-color: rgb(0, 0, 0);
+  }
+  .bg-black-100 {
+    background-color: rgb(0,0,0);
+  }
+  .bg-black-200 {
+    background-color: rgb(0,0,0);
+  }
+  .bg-black-300 {
+    background-color: rgb(0,0,0);
+  }
+  .bg-black-400 {
+    background-color: rgb(0,0,0);
+  }
+  .bg-black-500 {
+    background-color: rgb(0,0,0);
+  }
+  .bg-black-600 {
+    background-color: rgb(0,0,0);
+  }
+  .bg-black-700 {
+    background-color: rgb(0,0,0);
+  }
+  .bg-black-800 {
+    background-color: rgb(0,0,0);
+  }
+  .bg-black-900 {
+    background-color: rgb(0,0,0);
+  }
+
+  .ring-black-50 {
+    background-color: rgb(0, 0, 0);
+  }
+  .ring-black-100 {
+    background-color: rgb(0,0,0);
+  }
+  .ring-black-200 {
+    background-color: rgb(0,0,0);
+  }
+  .ring-black-300 {
+    background-color: rgb(0,0,0);
+  }
+  .ring-black-400 {
+    background-color: rgb(0,0,0);
+  }
+  .ring-black-500 {
+    --tw-ring-color: rgb(0,0,0);
+  }
+  .ring-black-600 {
+    background-color: rgb(0,0,0);
+  }
+  .ring-black-700 {
+    background-color: rgb(0,0,0);
+  }
+  .ring-black-800 {
+    background-color: rgb(0,0,0);
+  }
+  .ring-black-900 {
+    background-color: rgb(0,0,0);
+  }
+}
+
+
+
+
+.cpResizeScale{
+  animation: cpResizeScale 0.85s;
+  animation-timing-function: cubic-bezier(0.59, 0, 0.39, 0.98);
+  animation-play-state: running;
+  animation-fill-mode: forwards;
+
+}
+
+.cpResizeScale img:first-child{
+  animation: cpResizeScaleImg 0.85s;
+  animation-timing-function: cubic-bezier(0.59, 0, 0.39, 0.98);
+  animation-play-state:running;
+  animation-fill-mode: forwards;
+}
+
+
+
+
+
+@keyframes cpResizeScale {
+  0%{
+      clip-path: polygon(100% 0, 100% 0, 100% 0, 100% 0);
+
+  }
+  100%{
+      clip-path: polygon(100% 0, 0 0, 0 100%, 100% 100%);
+  }
+}
+@keyframes cpResizeScaleImg {
+  0%{
+      width:90%;
+  }
+  100%{
+      width:100%;
+  }
+}
