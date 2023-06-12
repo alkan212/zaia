@@ -325,7 +325,7 @@ export default function Store({ user, setUser }) {
                                                                             <button
                                                                                 className="text-sm font-medium leading-6 text-indigo-600 hover:text-indigo-500"
                                                                             >
-                                                                                View<span className="hidden sm:inline"> transaction</span>
+                                                                                View<span className="hidden sm:inline"> order</span>
                                                                                 <span className="sr-only">
                                                                                     , invoice #{transaction.invoiceNumber}, {transaction.client}
                                                                                 </span>

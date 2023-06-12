@@ -4,6 +4,7 @@ import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid'
 import { useRouter } from 'next/router'
 import { formatCurrency } from 'lib/utils'
 import Link from 'next/link'
+import { POST } from 'lib/requests'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -15,7 +16,7 @@ const statuses = {
     Overdue: 'text-red-700 bg-red-50 ring-red-600/10',
 }
 
-export function StoreItem({ client }) {
+export function StoreItem({user, index, stores, setStores, client }) {
 
     const router = useRouter()
 
@@ -32,6 +33,15 @@ export function StoreItem({ client }) {
     useEffect(() => {
         setStats(calculateStats_24h(client.last.revenue))
     }, [])
+
+
+    function onDelete(){
+        POST("/api/deleteStore", {storeName:client.name, userToken:user.token})
+
+        let buffer = [...stores];
+        buffer.splice(index, 1);
+        setStores(buffer);
+    }
 
 
     return (
@@ -97,6 +107,20 @@ export function StoreItem({ client }) {
                                     >
                                         Edit<span className="sr-only">, {client.name}</span>
                                     </Link>
+                                )}
+                            </Menu.Item>
+                            <Menu.Item>
+                                {({ active }) => (
+                                    <button
+                                    data-menu={true}
+                                    onClick={onDelete}
+                                        className={classNames(
+                                            active ? 'bg-gray-50' : '',
+                                            'block px-3 py-1 text-sm leading-6 text-red-500 w-full flex items-start'
+                                        )}
+                                    >
+                                        Delete<span className="sr-only">, {client.name}</span>
+                                    </button>
                                 )}
                             </Menu.Item>
                         </Menu.Items>

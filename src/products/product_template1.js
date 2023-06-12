@@ -31,6 +31,7 @@ export const product_template1 = {
     informations: [
       {
         comp: <ProductInformation />,
+        template:undefined,
         name: "Product_Information",
         index: 0,
         data: {

@@ -17,10 +17,21 @@ import { findGetParameter } from 'lib/utils'
 
 
 function assiociateComponent(storeData) {
+  storeData.informations.forEach((item, index) => {
+    item.comp = ASSIOCIATE_STORE_COMPONENTS[item.name]
+    item.template = ASSIOCIATE_STORE_TEMPLATE[item.name]
+  })
+
+  storeData.personalisation.forEach((item, index) => {
+    item.comp = ASSIOCIATE_STORE_COMPONENTS[item.name]
+    item.template = ASSIOCIATE_STORE_TEMPLATE[item.name]
+  })
+
   storeData.description.forEach((item, index) => {
     item.comp = ASSIOCIATE_STORE_COMPONENTS[item.name]
     item.template = ASSIOCIATE_STORE_TEMPLATE[item.name]
   })
+
   console.log(storeData)
   return storeData
 }
@@ -35,6 +46,7 @@ export default function creator({ user, setUser }) {
   const [product, setProduct] = useState(undefined)
   const [open, setOpen] = useState(false)
   const [nameOpen, setNameOpen] = useState(false)
+  const [isEdit, setIsEdit] = useState(false)
 
   // set the template to use
   useEffect(() => {
@@ -61,9 +73,8 @@ export default function creator({ user, setUser }) {
       if (response.success == true) {
         let storeData = response.store.data;
         storeData = assiociateComponent(storeData)
-        console.log(storeData)
-
         setProduct(storeData)
+        setIsEdit(true)
       }
     }
 
@@ -104,7 +115,7 @@ export default function creator({ user, setUser }) {
               </div>
 
               <div onClick={() => setNameOpen(true)} className='flex items-center justify-center bg-white px-7 cursor-pointer rounded-lg py-3.5 ml-3'>
-                <p className='text-black text-[14px] font-bold mr-1.5 '>Create your product</p>
+                <p className='text-black text-[14px] font-bold mr-1.5 '>{isEdit == false && "Create your product" || "Update Product"}</p>
                 <ArrowRightIcon className='text-black w-5' />
 
                 <NameModal callback={create} nameOpen={nameOpen} setNameOpen={setNameOpen} router={router} />
@@ -115,9 +126,9 @@ export default function creator({ user, setUser }) {
             <div className='pt-4 px-5'>
               {product &&
                 <>
-                  {/* <CreatorInformation product={product} setProduct={setProduct} />
+                  <CreatorInformation product={product} setProduct={setProduct} />
 
-                  <CreatorPersonalisation product={product} setProduct={setProduct} /> */}
+                  <CreatorPersonalisation product={product} setProduct={setProduct} />
 
                   <CreatorDescription product={product} setProduct={setProduct} />
                 </>
@@ -128,9 +139,9 @@ export default function creator({ user, setUser }) {
 
           <div className='hidden phone:block px-10 py-10 w-full flex justify-center min-h-[100vh] max-h-[100vh] overflow-y-auto col-start-2'>
             <div className='w-full max-w-6xl'>
-              {/* {Template && product &&
+              {Template && product &&
                 cloneElement(Template, { product: product })
-              } */}
+              } 
             </div>
 
 
@@ -147,6 +158,7 @@ export default function creator({ user, setUser }) {
 function NameModal({ callback, nameOpen, setNameOpen, router }) {
 
   const t = useRef(null)
+  const inputRef = useRef(null)
 
   const [inputFocus, setInputFocus] = useState(true)
   const [loading, setLoading] = useState(false)
@@ -192,7 +204,7 @@ function NameModal({ callback, nameOpen, setNameOpen, router }) {
       appear={true}
       className={"z-50 absolute top-0 left-0 w-full h-full"}
     >
-      <Dialog onClose={closeModal} open={nameOpen} >
+      <Dialog onClose={closeModal} open={nameOpen} initialFocus={inputRef}>
         <div className="fixed inset-0 flex items-center justify-center p-4 py-5 bg-black/30">
           <Dialog.Panel className="w-full max-w-[500px] rounded bg-white p-7">
             <div className='flex items-center justify-between'>
@@ -210,7 +222,7 @@ function NameModal({ callback, nameOpen, setNameOpen, router }) {
                   <IdentificationIcon className='w-6' />
                 </div>
                 <div className='h-[25px] w-[1px] bg-black/50'></div>
-                <input onInput={(e) => setName(e.currentTarget.value)} onBlur={onBlur} onFocus={onFocus} className='w-full h-full bg-transparent outline-none pl-3 font-medium' placeholder='My dream store' />
+                <input ref={inputRef} onInput={(e) => setName(e.currentTarget.value)} onBlur={onBlur} onFocus={onFocus} className='w-full h-full bg-transparent outline-none pl-3 font-medium' placeholder='My dream store' />
               </div>
               <p className='h-0 relative top-1 text-sm text-red-500'>{error && error}</p>
 
@@ -242,11 +254,3 @@ function NameModal({ callback, nameOpen, setNameOpen, router }) {
   )
 }
 
-
-function ButtonWithLoading() {
-  return (
-    <button>
-      {children}
-    </button>
-  )
-}
