@@ -31,8 +31,8 @@ const secondaryNavigation = [
 
 const statuses = {
     Paid: 'text-green-700 bg-green-50 ring-green-600/20',
-    Withdraw: 'text-gray-600 bg-gray-50 ring-gray-500/10',
-    Overdue: 'text-red-700 bg-red-50 ring-red-600/10',
+    Awaiting: 'text-gray-600 bg-gray-50 ring-gray-500/10',
+    Refund: 'text-red-700 bg-red-50 ring-red-600/10',
 }
 
 const daysList = [
@@ -51,7 +51,7 @@ const daysList = [
             {
                 amount: 1,
                 price: 7600,
-                status: 'Paid',
+                status: 'Awaiting',
                 date: 1686513890578,
                 saleNumber: 2,
                 icon: ShoppingBagIcon,
@@ -59,7 +59,7 @@ const daysList = [
             {
                 amount: 1,
                 price: 7600,
-                status: 'Paid',
+                status: 'Refund',
                 date: 1686513925073,
                 saleNumber: 1,
                 icon: ShoppingBagIcon,

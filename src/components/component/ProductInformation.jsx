@@ -49,7 +49,7 @@ export function ProductInformation({data, product, setProduct}){
 
         <Component name={data.name} icon={Icon} compRef={compRef} section={"Informations"}
                 data={data} product={product} setProduct={setProduct}>
-            <div className="space-y-4 xl:space-y-0 w-full flex justify-between align-center flex-wrap">
+            <div className=" space-y-4 xl:space-y-0 w-full flex justify-between align-center flex-wrap">
                 <TextField placeholder={"Basic Tee"} defaultData={data.data.name} callback={setName} name="Product Name" size='sm' />
                 <PriceField selectCallback={setCurrency} callback={setPrice} size='sm' defaultData={data.data.price} />
             </div>

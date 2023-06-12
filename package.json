@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.2",
     "@heroicons/react": "^2.0.18",
+    "@react-google-maps/api": "^2.18.1",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/typography": "^0.5.8",
     "autoprefixer": "^10.4.12",
@@ -28,8 +29,12 @@
     "react": "^18.2.0",
     "react-chartjs-2": "^5.1.0",
     "react-dom": "^18.2.0",
+    "react-google-autocomplete": "^2.7.3",
+    "react-native": "^0.71.10",
+    "react-native-maps": "^1.7.1",
     "react-spinners-kit": "^1.9.1",
     "request-ip": "^3.3.0",
+    "save": "^2.9.0",
     "tailwindcss": "^3.2.1",
     "use-debounce": "^9.0.2"
   },

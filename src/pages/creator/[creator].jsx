@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-import React, { Fragment, cloneElement, useEffect, useRef, useState } from 'react'
+import React, { Fragment, cloneElement, useCallback, useEffect, useRef, useState } from 'react'
 
 import { CreatorPersonalisation } from '@/components/CreatorPersonalisation'
 import { CreatorInformation } from '@/components/CreatorInformation'
@@ -90,6 +90,30 @@ export default function creator({ user, setUser }) {
     }
   }
 
+  let resize = useCallback(()=>{
+    let maxSize = 200
+    let c = document.createElement("canvas")
+    let img = document.createElement("img");
+
+    img.onload = ((e)=>{
+      let width = e.currentTarget.width;
+      let height = e.currentTarget.height;
+
+      if(width > height){
+        let ratio = maxSize/width;
+        let newHeight = height*ratio
+      }
+    })
+
+    img.src = "https://tailwindui.com/img/ecommerce-images/product-page-01-featured-product-shot.jpg"
+
+    c.setAttribute("src", "https://tailwindui.com/img/ecommerce-images/product-page-01-featured-product-shot.jpg");
+    document.body.appendChild(c);
+  }, [])
+  
+
+
+
 
   return (
     <div className='bg-white p-0 m-0 dark'>
@@ -124,6 +148,7 @@ export default function creator({ user, setUser }) {
             </div>
 
             <div className='pt-4 px-5'>
+              <button onClick={resize}>Rsize</button>
               {product &&
                 <>
                   <CreatorInformation product={product} setProduct={setProduct} />
