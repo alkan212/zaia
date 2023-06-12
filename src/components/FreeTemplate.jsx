@@ -135,7 +135,7 @@ export function FreeTemplate() {
     <section
       id="affiliate"
       aria-label="Affiliate"
-      className="bg-slate-900 pt-28 pb-10"
+      className="bg-zinc-900 pt-28 pb-10"
     >
       <Container>
         <div className="md:text-center">

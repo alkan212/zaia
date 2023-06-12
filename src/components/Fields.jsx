@@ -21,6 +21,7 @@ function Optionnal(){
 }
 
 export function TextField({
+  callback,
   id,
   label,
   type = 'text',
@@ -33,7 +34,7 @@ export function TextField({
     
     <div className={className}>
       {label && <Label id={id}>{label}  {!required && <Optionnal />}</Label>}
-      <input id={id} type={type} {...props} className={formClasses} />
+      <input onInput={(e)=>callback(e.currentTarget.value)} id={id} type={type} {...props} className={formClasses} />
     </div>
   )
 }

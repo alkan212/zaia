@@ -45,7 +45,7 @@ export function ClothingSize({data, product, setProduct}){
                 data={data} product={product} setProduct={setProduct}
             >
 
-                <div class="space-y-4 xl:space-y-0 w-full flex justify-between align-center flex-wrap">
+                <div className="space-y-4 xl:space-y-0 w-full flex justify-between align-center flex-wrap">
                     <TextField name="Title" size='sm' placeholder="Title" />
                 </div>
 

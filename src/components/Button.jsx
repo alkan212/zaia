@@ -26,6 +26,7 @@ const variantStyles = {
 }
 
 export function Button({
+  callback,
   variant = 'solid',
   color = 'white',
   className,
@@ -41,6 +42,6 @@ export function Button({
   return href ? (
     <Link href={href} className={className} {...props} />
   ) : (
-    <button className={className} {...props} />
+    <button onClick={callback} className={className} {...props} />
   )
 }

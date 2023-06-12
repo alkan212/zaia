@@ -27,10 +27,10 @@ export function CreatorDescription({product, setProduct}) {
             }else{
               product.count[obj.name] += 1
             }
-            
+
             return([
               cloneElement(obj.comp, {data:obj, product:product ,setProduct:setProduct, key:i}),
-              <Replace section={"description"} />
+              <Replace key={`replace_${i}`} section={"description"} />
             ])
           })
         }

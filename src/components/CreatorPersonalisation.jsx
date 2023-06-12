@@ -27,7 +27,7 @@ export function CreatorPersonalisation({product, setProduct}) {
 
             return([
               cloneElement(obj.comp, {data:obj, product:product ,setProduct:setProduct, key:i}),
-              <Replace section={"personalisations"} />
+              <Replace key={`replace_${i}`} section={"personalisations"} />
             ])
           })
         }

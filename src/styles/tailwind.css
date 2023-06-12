@@ -1,11 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+body { 
+  -webkit-font-smoothing: antialiased;
+  font-smooth: always;
+}
+
 
 #__next {
   min-height: 100vh;
   height:100vh;
+}
+
+
+
+@layer components {
+  .poppins {
+      font-family: 'Poppins', sans-serif;
+  }
+  .montserrat {
+      font-family: 'Montserrat', sans-serif;
+  }
+  .Comfortaa {
+      font-family: 'Comfortaa', cursive;
+  }
+  .oxygen{
+      font-family: 'Oxygen', sans-serif;
+  }
+
+  .lexend {
+      font-family: 'Lexend', sans-serif
+  }
+  .inter{
+      font-family: 'Inter', sans-serif
+  }
+  .jost{
+    font-family: 'Jost', sans-serif;
+  }
+  
+  .title{
+      color:"#0E101A";
+  }
+  .undertitle{
+      color:"#777d9e";
+  }
+
+  .unselectable {
+      -moz-user-select: none;
+      -khtml-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+  }
 }
 
 
@@ -144,3 +201,53 @@
       width:100%;
   }
 }
+
+
+
+
+
+
+.patern1 {
+  --s: 100px; /* control the size */
+  --c1: #F8B195;
+  --c2: #355C7D;
+  
+  --_g: 
+     var(--c2) 6%  14%,var(--c1) 16% 24%,var(--c2) 26% 34%,var(--c1) 36% 44%,
+     var(--c2) 46% 54%,var(--c1) 56% 64%,var(--c2) 66% 74%,var(--c1) 76% 84%,var(--c2) 86% 94%;
+  background:
+    radial-gradient(100% 100% at 100% 0,var(--c1) 4%,var(--_g),#0008 96%,#0000),
+    radial-gradient(100% 100% at 0 100%,#0000, #0008 4%,var(--_g),var(--c1) 96%)
+    var(--c1);
+  background-size: var(--s) var(--s);
+}
+.patern2 {
+  --s: 50px; /* control the size */
+  
+  --c: #CFF09E;
+  --_g: radial-gradient(#0B486B 49%,#0000 50%);
+  background:
+   var(--_g) calc(var(--s)/-2) calc(var(--s)/2),
+   repeating-conic-gradient(from 45deg,var(--c) 0 25%,#0000 0 50%)
+     calc(var(--s)/2) calc(var(--s)/2),
+   var(--_g),var(--_g) var(--s) var(--s) var(--c);
+  background-size: calc(2*var(--s)) calc(2*var(--s));
+}
+
+
+.patern3 {
+  --s: 220px; /* control the size */
+  --c1: #774F38;
+  --c2: #F1D4AF;
+  
+  --_g:radial-gradient(#0000 60%,var(--c1) 61% 63%,#0000 64% 77%,var(--c1) 78% 80%,#0000 81%);
+  --_c:,#0000 75%,var(--c2) 0;
+  background:
+    conic-gradient(at 12% 20% var(--_c)) calc(var(--s)* .44) calc(.9*var(--s)),
+    conic-gradient(at 12% 20% var(--_c)) calc(var(--s)*-.06) calc(.4*var(--s)),
+    conic-gradient(at 20% 12% var(--_c)) calc(.9*var(--s)) calc(var(--s)* .44),
+    conic-gradient(at 20% 12% var(--_c)) calc(.4*var(--s)) calc(var(--s)*-.06),
+    var(--_g),var(--_g) calc(var(--s)/2) calc(var(--s)/2) var(--c2);
+  background-size: var(--s) var(--s);
+}
+

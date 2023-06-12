@@ -11,6 +11,7 @@
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
     "@headlessui/react": "^1.7.2",
+    "@heroicons/react": "^2.0.18",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/typography": "^0.5.8",
     "autoprefixer": "^10.4.12",
@@ -18,11 +19,15 @@
     "clsx": "^1.2.1",
     "focus-visible": "^5.2.0",
     "framer-motion": "^8.0.2",
+    "js-cookie": "^3.0.5",
+    "js-sha256": "^0.9.0",
     "next": "^13.1.0",
     "postcss-focus-visible": "^6.0.4",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.1.0",
     "react-dom": "^18.2.0",
+    "react-spinners-kit": "^1.9.1",
+    "request-ip": "^3.3.0",
     "tailwindcss": "^3.2.1",
     "use-debounce": "^9.0.2"
   },

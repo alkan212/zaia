@@ -11,9 +11,9 @@ export function Template_Images({images}){
     return (
         <div className="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
             <div className="grid grid-cols-2 grid-rows-1 lg:grid-rows-2 gap-6">
-            {images.map((image) => (
+            {images.map((image, index) => (
                 <img
-                key={image.id}
+                key={index}
                 src={image}
                 alt={"ouioui"}
                 className={classNames(

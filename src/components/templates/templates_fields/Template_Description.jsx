@@ -10,7 +10,7 @@ export function Template_Description({config, obj}) {
 
             <div className="prose prose-sm mt-3 text-gray-500">
                 {descriptions.map((obj, i ) => {
-                    return (obj && <p>{obj}</p>);
+                    return (obj && <p key={i}>{obj}</p>);
                 })}
             </div>
         </div>

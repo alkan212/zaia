@@ -1,9 +1,13 @@
+import { tokenGen } from 'lib/tokenGen'
 import Image from 'next/image'
+import { useState } from 'react';
 
 
 
 
-export function TextField({name, callback ,size="full" ,...props}) {
+export function TextField({name, callback ,size="full" , defaultData, ...props}) {
+
+  const [token, setToken] = useState(tokenGen());
 
   let input_size = "max-w-full"
 
@@ -17,17 +21,17 @@ export function TextField({name, callback ,size="full" ,...props}) {
 
   return (
     <div className={`${input_size} w-full`}>
-      <label htmlFor="email" className="block text-sm font-medium text-gray-300">
+      <label htmlFor={`textField_${token}`} className="block text-sm font-medium text-gray-300">
         {name}
       </label>
       <div className={`mt-1`}>
         <input
           onInput={callback && ((e)=>callback(e.currentTarget.value))}
           required
-          defaultValue=""
+          defaultValue={defaultData ?? ""}
           type="email"
-          name="email"
-          id="email"
+          name={`textField_${token}`}
+          id={`textField_${token}`}
           className="block w-full text-white rounded-md bg-black/20 focus:bg-black/40 border-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           {...props}
         />

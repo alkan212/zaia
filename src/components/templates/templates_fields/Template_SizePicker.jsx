@@ -12,7 +12,7 @@ export function Template_SizePicker({config, obj}) {
 
     let sizes = obj.data.sizes;
 
-    const [selectedSize, setSelectedSize] = useState(sizes[2])
+    const [selectedSize, setSelectedSize] = useState(sizes[3])
 
     return (
         <div className="mt-8">
@@ -20,7 +20,8 @@ export function Template_SizePicker({config, obj}) {
                 <h2 className="text-sm font-medium text-gray-900">Size</h2>
             </div>
 
-            <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-0">
+
+            <RadioGroup  defaultValue={selectedSize.size} onChange={setSelectedSize} className="mt-0">
                 <RadioGroup.Label className="sr-only"> Choose a size </RadioGroup.Label>
                 <div className="flex flex-row flex-wrap">
                     {sizes.map((size) => (

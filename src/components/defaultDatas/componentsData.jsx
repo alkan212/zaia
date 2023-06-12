@@ -100,8 +100,22 @@ export var colorsData = (index = 0, toggle = true) => {
 
 
 /* description */
+let default_detailsData = [
+    {
+        index: 0,
+        value: ``
+    },
+    {
+        index: 1,
+        value: ``
+    },
+    {
+        index: 2,
+        value: ``
+    },
+]
 
-export var detailsData = (index = 0, toggle = true) => {
+export var detailsData = (index = 0, toggle = true, defaultData, defaultTitle) => {
 
     return {
         comp: <Details />,
@@ -110,25 +124,13 @@ export var detailsData = (index = 0, toggle = true) => {
         toggle: toggle,
         index: index,
         data: {
-            details: [
-                {
-                    index: 0,
-                    value: ``
-                },
-                {
-                    index: 1,
-                    value: ``
-                },
-                {
-                    index: 2,
-                    value: ``
-                },
-            ],
+            details: defaultData ?? default_detailsData,
+            title: defaultTitle ?? defaultTitle,
         }
     }
 }
 
-export var descriptionData = (index = 0, toggle = true) => {
+export var descriptionData = (index = 0, toggle = true, defaultData=[],) => {
     return {
         comp: <Description />,
         template:<Template_Description />,
@@ -136,7 +138,7 @@ export var descriptionData = (index = 0, toggle = true) => {
         toggle: toggle,
         index: index,
         data: {
-            descriptions: [],
+            descriptions: defaultData,
         }
     }
 }

@@ -48,7 +48,7 @@ export function SearchItem({data, section ,name, product, setProduct , icon, sea
 					<ImageReact src={icon} alt={""} width={200} height={200} className={"z-[1] h-4 aspect-square"} />
 				</div>
 				
-				<p className="text-base text-gray-900 font-medium ml-3">
+				<p className="text-base text-gray-900 font-semibold  ml-3">
 					{Array.from(name.replace("_"," ")).map((obj, i) => (
 						(newSearchValue.includes(obj.toLowerCase()) && <span className="text-[#6360EB]">{obj}</span> || <span className="">{obj}</span>)
 					))}

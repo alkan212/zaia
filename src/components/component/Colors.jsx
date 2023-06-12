@@ -58,12 +58,12 @@ export function Colors({data, product, setProduct}){
             data={data} product={product} setProduct={setProduct}
             >
 
-                <div class="space-y-4 xl:space-y-0 w-full flex justify-between align-center flex-wrap">
+                <div className="space-y-4 xl:space-y-0 w-full flex justify-between align-center flex-wrap">
                     <TextField name="Title" size='sm' placeholder="Color" />
                 </div>
         
-                <div class="flex flex-col align-center flex-row mt-8 space-y-2">
-                    <p class="block text-sm font-medium text-gray-300 relative top-0.5">Theme Colors</p>
+                <div className="flex flex-col align-center flex-row mt-8 space-y-2">
+                    <p className="block text-sm font-medium text-gray-300 relative top-0.5">Theme Colors</p>
                     <ColorField data={data} addCallback={addColor} changeCallback={changeColor} deleteCallback={onDeleteColor} />
                 </div>
                 <DeleteField callback={onDelete} compRef={compRef} />

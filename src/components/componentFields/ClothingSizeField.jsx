@@ -11,7 +11,7 @@ export function ClothingSizeField({data, callback}){
             <div className='flex items-center mt-1 flex-wrap'>
                 {
                     data.data.sizes.map((obj, i)=>{
-                        return(<CheckBoxSimple index={i} name={obj.size} isChecked={obj.value} callback={callback} />)
+                        return(<CheckBoxSimple key={i} index={i} name={obj.size} isChecked={obj.value} callback={callback} />)
                     })
                 }
             </div>

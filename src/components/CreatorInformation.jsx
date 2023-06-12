@@ -25,7 +25,7 @@ export function CreatorInformation({product, setProduct}) {
 
             return([
               cloneElement(obj.comp, {data:obj, product:product ,setProduct:setProduct, key:i}),
-              <Replace section={"informations"} />
+              <Replace key={`replace_${i}`} section={"informations"} />
             ])
           })
         }

@@ -11,7 +11,7 @@ export function TextAreaField({name, callback, defaultData}){
           <div className="mt-1">
             <textarea
               onInput={callback}
-              rows={4}
+              rows={6}
               name="comment"
               id="comment"
               className="block w-full bg-black/20 text-white rounded-md border-gray-700 shadow-sm focus:bg-black/40 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"

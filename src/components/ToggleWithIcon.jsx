@@ -35,7 +35,7 @@ export function ToggleWithIcon({callback ,isChecked}) {
       <span className="sr-only">Use setting</span>
       <span
         className={classNames(
-          isChecked ? 'translate-x-5 bg-white' : 'translate-x-0 bg-indigo-900',
+          isChecked ? 'translate-x-5 bg-white' : 'translate-x-0 bg-white ',
           'pointer-events-none relative inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
         )}
       >
@@ -46,7 +46,7 @@ export function ToggleWithIcon({callback ,isChecked}) {
           )}
           aria-hidden="true"
         >
-          <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 12 12">
+          <svg className="h-3 w-3 text-indigo-600" fill="none" viewBox="0 0 12 12">
             <path
               d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2"
               stroke="currentColor"

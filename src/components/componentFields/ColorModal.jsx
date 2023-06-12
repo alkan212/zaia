@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/24/outline'
 import { createPortal } from 'react-dom'
 
 
@@ -77,16 +76,16 @@ function Modal({inputColor, setInputColor, parentsSetState, callback}) {
                      leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                   >
                      <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
-                        <h2 class="font-medium">Choose Your Color</h2>
+                        <h2 className="font-medium">Choose Your Color</h2>
 
                         <form>
-                           <fieldset id="ColorsContainer" class="flex flex-wrap items-center mt-5">
+                           <fieldset id="ColorsContainer" className="flex flex-wrap items-center mt-5">
                               {
                                  Colors.map((data, i) => (
                                     <>
                                        <input onChange={onColorChange} id={`modalColor_${i}`} name={`modalColor`} className={`sr-only ${data.inputPeer}`} value={`${data.color}`} defaultChecked={data.color === inputColor} type="radio" />
                                        <label for={`modalColor_${i}`} className={`${data.labelPeer} active:scale-90 border border-gray-100 p-1 bg-white cursor-pointer hover:bg-gray-100 hover:border-gray-300 mx-1 my-1`}>
-                                          <div class={`${data.color} min-w-[36px] min-h-[18px]`}></div>
+                                          <div className={`${data.color} min-w-[36px] min-h-[18px]`}></div>
                                        </label>
                                     </>
 
@@ -132,7 +131,7 @@ export function ColorModal({ toggle = false, color = "indigo", callback }) {
 
    return (
       <>
-         <button class="active:scale-90 border border-gray-700 rounded-md p-1.5 bg-black/30 cursor-pointer hover:bg-black/50 hover:border-gray-500 ml-2" onClick={setOpen} checked="false" id="">
+         <button className="active:scale-90 border border-gray-700 rounded-md p-1.5 bg-black/30 cursor-pointer hover:bg-black/50 hover:border-gray-500 ml-2" onClick={setOpen} checked={false} id="">
             <div id="themeColor" value="indigo" className={`${inputColor} min-w-[36px] min-h-[18px]`}></div>
          </button>
 

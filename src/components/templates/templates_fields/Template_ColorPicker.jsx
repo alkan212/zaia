@@ -22,9 +22,9 @@ export function Template_ColorPicker({config, obj}){
             <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-2">
                 <RadioGroup.Label className="sr-only"> Choose a color </RadioGroup.Label>
                 <div className="flex items-center space-x-3">
-                    {colors.map((color) => (
+                    {colors.map((color, index) => (
                         <RadioGroup.Option
-                            key={color}
+                            key={index}
                             value={color}
                             // style={{
                             //     boxShadow:`0px 0px 0px 1px white, 0px 0px 0px 3px ${getColorValueFromBg(color.bgColor) != "#FFFFFF" && getColorValueFromBg(color.bgColor) || "#777777"}`

@@ -1,6 +1,5 @@
 import ImageReact from "next/image"
 import { useEffect, useRef, useState } from "react"
-import { Replace } from "@/pages/Creator";
 import { ToggleWithIcon } from "@/components/ToggleWithIcon"
 
 export function Component({
@@ -79,31 +78,31 @@ export function Component({
     <>
       <div className="" ref={compRef}>
         <input id={componentId} type="checkbox" className='peer/open sr-only' />
-        <div name={data.name} className="group peer-checked/open:max-h-fit min-h-[70px] max-h-0 relative w-full rounded-[8px] bg-white dark:bg-[#151424] overflow-hidden ease-[cubic-bezier(0.165,0.84,0.44,1)]">
+        <div name={data.name} className="group peer-checked/open:max-h-fit min-h-[70px] max-h-0 relative w-full rounded-[8px] bg-white dark:bg-[#171627] overflow-hidden ease-[cubic-bezier(0.165,0.84,0.44,1)]">
           {/* header */}
           <div className="pointer-events-none group-hover:w-[90px] duration-200 ease w-[80px] aspect-square absolute left-0 top-0 bg-indigo-500 rounded-full blur-[80px]"></div>
 
           <label htmlFor={componentId} onClick={toggleOpen} onMouseMove={compMouseMove} onMouseDown={compMouseDown} ctype="info" toggle="false" className="unselectable pl-2 pr-7 py-2 relative flex items-center justify-between w-full h-[70px] cursor-pointer relative overflow-hidden">
             <div className="h-full flex items-center">
-              <div className="h-full aspect-square rounded-[7px] flex items-center justify-center bg-gradient-to-b from-[#6360EB] to-[#9896EE]">
+              <div className="h-[calc(100%-5px)] ml-0.5 aspect-square rounded-[7px] flex items-center justify-center bg-gradient-to-b from-[#6360EB] to-[#6360EB]">
                 <ImageReact src={icon} alt={""} width={200} height={200} className={"z-[1] h-5 w-5"} />
               </div>
 
               <div className="pl-3.5 space-y-1 flex flex-col">
                 <p className="font-medium text-sm text-[#F9F9FF]/90">{data.name.replace('_', " ")}</p>
-                {data.toggle != undefined && <ToggleWithIcon callback={switchToggle} isChecked={data.toggle} />}
               </div>
             </div>
 
             <div className="h-full flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#676392" className={`${open && 'rotate-180'} transition duration-100 ease-in-out pointer-events-none opacity-75 h-[16px] aspect-square`}>
+              {data.toggle != undefined && <ToggleWithIcon callback={switchToggle} isChecked={data.toggle} />}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`${open && 'rotate-180'} ml-4 transition duration-100 ease-in-out pointer-events-none opacity-75 text-gray-400 h-[16px] aspect-square`}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
               </svg>
             </div>
           </label>
 
           {/* body */}
-          <div className="px-8 py-8" {...props}>
+          <div className="px-6 py-8" {...props}>
 
           </div>
 

@@ -10,7 +10,6 @@ function classNames(...classes) {
 
 export function Template_ReviewStars({config, obj}){
 
-    console.log(obj)
     return (
         <div className="mt-4">
             <h2 className="sr-only">Reviews</h2>
@@ -20,9 +19,9 @@ export function Template_ReviewStars({config, obj}){
                     <span className="sr-only"> out of 5 stars</span>
                 </p>
                 <div className="ml-1 flex items-center">
-                    {[0, 1, 2, 3, 4].map((rating) => (
+                    {[0, 1, 2, 3, 4].map((rating, index) => (
                         <StarIcon
-                            key={rating}
+                            key={index}
                             className={classNames(
                                 obj.data.stars > rating ? 'text-yellow-400' : 'text-gray-200',
                                 'h-5 w-5 flex-shrink-0'

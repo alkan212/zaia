@@ -240,22 +240,23 @@ export default function dashboard() {
           <main className='w-full max-w-7xl pt-10 mx-auto'>
             <div className='px-10 z-[10]'>
               <DashboardSection />
-              
+
               <div className='-left-[200px] w-[400px] h-[500px] bg-blue-600 absolute rounded-full opacity-[0.7] blur-[400px] -z-[0]'></div>
 
               <div className='w-full grid grid-cols-1 lg:grid-rows-2 lg:grid-cols-2 gap-8 mt-24 z-[2]'>
-                <Chart name={"Sales"} icon={<SalesIcon />} data={{value:163, unit:"" ,percent:21}} />
-                <Chart name={"Revenues"} icon={<RevenuesIcon />} data={{value:2782, unit:"€" ,percent:18}} />
-                <Chart name={"Visitors"} icon={<VisitorsIcon />} data={{value:32941, unit:"" ,percent:52}} />
-                <Chart name={"Conversion"} icon={<ConversionIcon />} data={{value:2, unit:"%" ,percent:-2}} />
+                <Chart name={"Sales"} icon={<SalesIcon />} data={{ value: 163, unit: "", percent: 21 }} />
+                <Chart name={"Revenues"} icon={<RevenuesIcon />} data={{ value: 2782, unit: "€", percent: 18 }} />
+                <Chart name={"Visitors"} icon={<VisitorsIcon />} data={{ value: 32941, unit: "", percent: 52 }} />
+                <Chart name={"Conversion"} icon={<ConversionIcon />} data={{ value: 2, unit: "%", percent: -2 }} />
               </div>
 
             </div>
             <div className='w-[400px] h-[500px] bg-indigo-600 absolute rounded-full opacity-[0.4] blur-[400px] z-[0] -right-[250px] bottom-10'></div>
-            <div className='shadow-lg shadow-inner mt-28 bg-gray-100 pb-28 pt-10 rounded-t-[0px] xl:rounded-t-[40px]'>
-              <Orders />
-            </div>
           </main>
+
+          <div className='shadow-lg shadow-inner mt-28 bg-gray-100 pb-28 pt-10 rounded-t-[0px] xl:rounded-t-[0px] w-full'>
+            <Orders />
+          </div>
         </div>
       </div>
     </>

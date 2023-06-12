@@ -1,6 +1,5 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/24/outline'
 import { Template_1 } from '@/components/templates/template_1'
 
 export function Preview({product, open, setOpen}) {
