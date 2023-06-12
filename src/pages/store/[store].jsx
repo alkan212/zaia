@@ -287,55 +287,7 @@ export default function Store({ user, setUser }) {
                                                                 </th>
                                                             </tr>
                                                             {day.transactions.map((transaction) => (
-                                                                <tr key={transaction.id}>
-                                                                    <td className="relative py-5 pr-6">
-                                                                        <div className="flex gap-x-6">
-                                                                            <transaction.icon
-                                                                                className="hidden h-6 w-5 flex-none text-gray-400 sm:block"
-                                                                                aria-hidden="true"
-                                                                            />
-                                                                            <div className="flex-auto">
-                                                                                <div className="flex items-start gap-x-3">
-                                                                                    <div className="text-sm font-medium leading-6 text-gray-900">
-                                                                                        {formatCurrency(transaction.price)}{store?.data.informations[0].data.currency}
-                                                                                    </div>
-                                                                                    <div
-                                                                                        className={classNames(
-                                                                                            statuses[transaction.status],
-                                                                                            'rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset'
-                                                                                        )}
-                                                                                    >
-                                                                                        {transaction.status}
-                                                                                    </div>
-                                                                                </div>
-                                                                                {transaction.amount ? (
-                                                                                    <div className="mt-1 text-xs leading-5 text-gray-500">{transaction.amount} product</div>
-                                                                                ) : null}
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="absolute bottom-0 right-full h-px w-screen bg-gray-100" />
-                                                                        <div className="absolute bottom-0 left-0 h-px w-screen bg-gray-100" />
-                                                                    </td>
-                                                                    <td className="hidden py-5 pr-6 sm:table-cell">
-                                                                        <div className="text-sm leading-6 text-gray-900">{formatDateFromTimestamp(transaction.date)}</div>
-                                                                        <div className="mt-1 text-xs leading-5 text-gray-500">{formatTimeFromTimestampHours(transaction.date)}</div>
-                                                                    </td>
-                                                                    <td className="py-5 text-right">
-                                                                        <div className="flex justify-end">
-                                                                            <button
-                                                                                className="text-sm font-medium leading-6 text-indigo-600 hover:text-indigo-500"
-                                                                            >
-                                                                                View<span className="hidden sm:inline"> order</span>
-                                                                                <span className="sr-only">
-                                                                                    , invoice #{transaction.invoiceNumber}, {transaction.client}
-                                                                                </span>
-                                                                            </button>
-                                                                        </div>
-                                                                        <div className="mt-1 text-xs leading-5 text-gray-500">
-                                                                            Sale number <span className="text-gray-900">#{transaction.saleNumber}</span>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
+                                                                <AcitivityItem key={transaction.id} store={store} router={router} transaction={transaction} />
                                                             ))}
                                                         </Fragment>
                                                     ))}
@@ -351,5 +303,143 @@ export default function Store({ user, setUser }) {
             </SideBar>
 
         </>
+    )
+}
+
+
+function AcitivityItem({store, transaction, router}) {
+
+    const [open, setOpen] = useState(false)
+
+    return (
+        <tr key={transaction.id}>
+            <td className="relative py-5 pr-6">
+                <div className="flex gap-x-6">
+                    <transaction.icon
+                        className="hidden h-6 w-5 flex-none text-gray-400 sm:block"
+                        aria-hidden="true"
+                    />
+                    <div className="flex-auto">
+                        <div className="flex items-start gap-x-3">
+                            <div className="text-sm font-medium leading-6 text-gray-900">
+                                {formatCurrency(transaction.price)}{store?.data.informations[0].data.currency}
+                            </div>
+                            <div
+                                className={classNames(
+                                    statuses[transaction.status],
+                                    'rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset'
+                                )}
+                            >
+                                {transaction.status}
+                            </div>
+                        </div>
+                        {transaction.amount ? (
+                            <div className="mt-1 text-xs leading-5 text-gray-500">{transaction.amount} product</div>
+                        ) : null}
+                    </div>
+                </div>
+                <div className="absolute bottom-0 right-full h-px w-screen bg-gray-100" />
+                <div className="absolute bottom-0 left-0 h-px w-screen bg-gray-100" />
+            </td>
+            <td className="hidden py-5 pr-6 sm:table-cell">
+                <div className="text-sm leading-6 text-gray-900">{formatDateFromTimestamp(transaction.date)}</div>
+                <div className="mt-1 text-xs leading-5 text-gray-500">{formatTimeFromTimestampHours(transaction.date)}</div>
+            </td>
+            <td className="py-5 text-right">
+                <div className="flex justify-end">
+                    <button
+                        onClick={() => setOpen(true)}
+                        className="text-sm font-medium leading-6 text-indigo-600 hover:text-indigo-500"
+                    >
+                        View<span className="hidden sm:inline"> order</span>
+                        <span className="sr-only">
+                            , invoice #{transaction.invoiceNumber}, {transaction.client}
+                        </span>
+                    </button>
+                    <OrderModal open={open} setOpen={setOpen} router={router} order={transaction} />
+                </div>
+                <div className="mt-1 text-xs leading-5 text-gray-500">
+                    Sale number <span className="text-gray-900">#{transaction.saleNumber}</span>
+                </div>
+            </td>
+        </tr>
+    )
+}
+
+
+
+function OrderModal({ open, setOpen, router, order }) {
+
+
+    const [inputFocus, setInputFocus] = useState(true)
+    const [loading, setLoading] = useState(false)
+    const [success, setSuccess] = useState(undefined)
+    const [name, setName] = useState("")
+    const [error, setError] = useState(undefined)
+
+    function onFocus(e) {
+        setInputFocus(true)
+    }
+
+    function onBlur(e) {
+        setInputFocus(false)
+    }
+
+    async function onClick() {
+        if (name == "") { return }
+        setLoading(true)
+        let response = await callback(name);
+        if (response == true) {
+            setSuccess(true)
+
+            setTimeout(() => {
+                router.push("/store/" + name)
+            }, 700)
+        }
+    }
+
+    function closeModal() {
+        t.current.click()
+    }
+
+    return (
+        <Transition
+            show={open}
+            enter="transition duration-200 ease-out"
+            enterFrom="transform opacity-0"
+            enterTo="transform opacity-100"
+            leave="transition-all duration-500 ease-out"
+            leaveFrom="transform opacity-100"
+            leaveTo="transform opacity-0"
+            as={Fragment}
+            appear={true}
+            className={"z-50 fixed overflow-y-auto top-0 left-0 w-full h-full"}
+        >
+            <Dialog onClose={closeModal} open={open} >
+                <div  className="absolute inset-0 flex items-center justify-center p-4 py-5 bg-black/30">
+                    <Dialog.Panel className="w-full max-w-[500px] rounded bg-white p-7">
+                        <div className='flex items-center justify-between'>
+                            <Dialog.Title className={"text-[17px] font-medium "}>Order #{order.saleNumber}</Dialog.Title>
+                            <button onClick={() => setOpen(false)} className='outline-none'>
+                                <XMarkIcon className='w-5 cursor-pointer' />
+                            </button>
+                        </div>
+
+                        <div className='mt-12'>
+                            <p className='text-[#333868] text-[15px]'>store name</p>
+                        
+                            <p className='h-0 relative top-1 text-sm text-red-500'>{error && error}</p>
+
+                            <div className='flex items-center justify-end w-full mt-7'>
+                                <button onClick={onClick} className={`group text-white flex items-center justify-center px-6 h-[42px] text-[16px] border-[1.5px] border-black bg-black rounded transition ${loading == false && "hover:bg-white hover:text-black"}`}>
+                                    Mark as delivered
+                                </button>
+                            </div>
+
+                        </div>
+                    </Dialog.Panel>
+                </div>
+            </Dialog>
+        </Transition>
     )
 }

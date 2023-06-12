@@ -47,6 +47,7 @@ export default function creator({ user, setUser }) {
   const [open, setOpen] = useState(false)
   const [nameOpen, setNameOpen] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
+  const [storeName, setStoreName] = useState(undefined)
 
   // set the template to use
   useEffect(() => {
@@ -75,6 +76,7 @@ export default function creator({ user, setUser }) {
         storeData = assiociateComponent(storeData)
         setProduct(storeData)
         setIsEdit(true)
+        setStoreName(storeName)
       }
     }
 
@@ -90,18 +92,27 @@ export default function creator({ user, setUser }) {
     }
   }
 
-  let resize = useCallback(()=>{
+  async function updateStore() {
+    let response = await POST("/api/updateStore", { storeName: storeName, userToken: user.token, storeData: product })
+
+    if (response.success == true) {
+      return true
+    }
+  }
+
+
+  let resize = useCallback(() => {
     let maxSize = 200
     let c = document.createElement("canvas")
     let img = document.createElement("img");
 
-    img.onload = ((e)=>{
+    img.onload = ((e) => {
       let width = e.currentTarget.width;
       let height = e.currentTarget.height;
 
-      if(width > height){
-        let ratio = maxSize/width;
-        let newHeight = height*ratio
+      if (width > height) {
+        let ratio = maxSize / width;
+        let newHeight = height * ratio
       }
     })
 
@@ -110,7 +121,7 @@ export default function creator({ user, setUser }) {
     c.setAttribute("src", "https://tailwindui.com/img/ecommerce-images/product-page-01-featured-product-shot.jpg");
     document.body.appendChild(c);
   }, [])
-  
+
 
 
 
@@ -133,18 +144,13 @@ export default function creator({ user, setUser }) {
           <div className='fixed pb-20  w-full phone:max-w-[400px] xl:max-w-[500px] bg-[#100F1F] overflow-y-auto max-h-[100vh] min-h-[100vh] scrollbar'>
 
             <div className=' bg-[#6360EB] rounded-b-[7px] justify-between items-center phone:space-y-0 px-6 py-8 flex'>
-              <div onClick={() => router.push("/templates")} className='flex items-center justify-center bg-black px-8 cursor-pointer rounded-lg py-3.5'>
+              <div onClick={() => { isEdit == false ? router.push("/templates") : router.push(`/store/${storeName}`) }} className='flex items-center justify-center bg-black px-8 cursor-pointer rounded-lg py-3.5'>
                 <p className='text-white text-[14px] font-medium mr-1.5 hidden screen-x-500:block'>Cancel</p>
                 <XMarkIcon className='text-white w-5' />
               </div>
 
-              <div onClick={() => setNameOpen(true)} className='flex items-center justify-center bg-white px-7 cursor-pointer rounded-lg py-3.5 ml-3'>
-                <p className='text-black text-[14px] font-bold mr-1.5 '>{isEdit == false && "Create your product" || "Update Product"}</p>
-                <ArrowRightIcon className='text-black w-5' />
+              <CreateButton isEdit={isEdit} router={router} nameOpen={nameOpen} setNameOpen={setNameOpen} create={create} updateStore={updateStore} />
 
-                <NameModal callback={create} nameOpen={nameOpen} setNameOpen={setNameOpen} router={router} />
-
-              </div>
             </div>
 
             <div className='pt-4 px-5'>
@@ -166,7 +172,7 @@ export default function creator({ user, setUser }) {
             <div className='w-full max-w-6xl'>
               {Template && product &&
                 cloneElement(Template, { product: product })
-              } 
+              }
             </div>
 
 
@@ -176,6 +182,56 @@ export default function creator({ user, setUser }) {
 
       </div>
     </div>
+  )
+}
+
+
+function CreateButton({ isEdit, router, nameOpen, setNameOpen, create, updateStore }) {
+
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(undefined)
+
+  async function update(){
+    setLoading(true);
+    let response = await updateStore();
+    if(response == true){
+      setSuccess(true)
+      setTimeout(() => {
+        router.push(`/store/${decodeURI(router.query.name)}`)
+      }, 700);
+    }
+  }
+
+  return (
+    <>
+      {isEdit == false &&
+        <div onClick={() => setNameOpen(true)} className='flex items-center justify-center bg-white px-7 cursor-pointer rounded-lg py-3.5 ml-3'>
+          <p className='text-black text-[14px] font-bold mr-1.5 '>Create your product</p>
+          <ArrowRightIcon className='text-black w-5' />
+
+          <NameModal callback={create} nameOpen={nameOpen} setNameOpen={setNameOpen} router={router} />
+
+        </div>
+      }
+
+      {isEdit == true &&
+        <div onClick={update} className='flex items-center justify-center bg-white px-7 cursor-pointer rounded-lg py-3.5 ml-3'>
+          {loading == true && success == undefined &&
+            <CircleSpinner size={20} color={"#000000"} />
+          }
+          {success == true &&
+            <CheckIcon className='text-black w-5' strokeWidth={2.5} />
+          }
+          {loading == false && success == undefined &&
+            <>
+              <p className='text-black text-[14px] font-bold mr-1.5 '>Update Product</p>
+              <ArrowRightIcon className='text-black w-5' />
+            </>
+          }
+        </div>
+      }
+    </>
+
   )
 }
 
