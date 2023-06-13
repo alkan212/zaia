@@ -19,13 +19,13 @@ async function GET(filter = {}, collection) {
 }
 
 export async function createUser(res, data, ip, collection, db) {
-    let token = "user_"+tokenGen();
+    let token = "user_" + tokenGen();
     let hashedPass = sha256(data.password)
 
     let response = {
         email: data.email,
         password: hashedPass,
-        status: data.status, 
+        status: data.status,
         "token": token,
         "ip": ip,
     }
@@ -33,7 +33,11 @@ export async function createUser(res, data, ip, collection, db) {
 
     const user = await collection.insertOne(response)
 
-    await res.setHeader('Set-Cookie', [serialize('token', token, { path: '/' }), serialize('account', true, { path: '/' })]);
+    const expiresIn = 300 * 24 * 60 * 60 * 1000; // 300 days in milliseconds
+    await res.setHeader('Set-Cookie', [
+        serialize('token', token, { path: '/', maxAge: expiresIn }),
+        serialize('account', true, { path: '/', maxAge: expiresIn }),
+    ]);
 
     return token
 }
@@ -79,7 +83,7 @@ export default async function handler(req, res) {
         const db = client.db("zaia");
         const collection = db.collection("users");
         console.log(2)
-        switch (req.method) {   
+        switch (req.method) {
             case "POST": res.json(await POST(res, req, req.body, db, collection)); break
             case "GET": res.json(await GET(req.headers, collection)); break
         }

@@ -13,7 +13,7 @@ import {
     ShoppingBagIcon,
     ShoppingCartIcon,
 } from '@heroicons/react/20/solid'
-import { BellIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { BellIcon, PaperAirplaneIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { SideBar } from '@/components/sidebar/SideBar'
 import { useRouter } from 'next/router'
 import { POST } from 'lib/requests'
@@ -307,7 +307,7 @@ export default function Store({ user, setUser }) {
 }
 
 
-function AcitivityItem({store, transaction, router}) {
+function AcitivityItem({ store, transaction, router }) {
 
     const [open, setOpen] = useState(false)
 
@@ -356,7 +356,7 @@ function AcitivityItem({store, transaction, router}) {
                             , invoice #{transaction.invoiceNumber}, {transaction.client}
                         </span>
                     </button>
-                    <OrderModal open={open} setOpen={setOpen} router={router} order={transaction} />
+                    <OrderModal open={open} setOpen={setOpen} router={router} order={transaction} store={store} />
                 </div>
                 <div className="mt-1 text-xs leading-5 text-gray-500">
                     Sale number <span className="text-gray-900">#{transaction.saleNumber}</span>
@@ -368,7 +368,9 @@ function AcitivityItem({store, transaction, router}) {
 
 
 
-function OrderModal({ open, setOpen, router, order }) {
+const statusDict = { "Awaiting delivery": "bg-yellow-100 text-yellow-800", "Delivered": "bg-green-100 text-green-800", "Refunded": "bg-red-100 text-red-800" }
+
+function OrderModal({ open, setOpen, router, order, store }) {
 
 
     const [inputFocus, setInputFocus] = useState(true)
@@ -376,6 +378,7 @@ function OrderModal({ open, setOpen, router, order }) {
     const [success, setSuccess] = useState(undefined)
     const [name, setName] = useState("")
     const [error, setError] = useState(undefined)
+    const [status, setStatus] = useState("Awaiting delivery")
 
     function onFocus(e) {
         setInputFocus(true)
@@ -416,23 +419,90 @@ function OrderModal({ open, setOpen, router, order }) {
             className={"z-50 fixed overflow-y-auto top-0 left-0 w-full h-full"}
         >
             <Dialog onClose={closeModal} open={open} >
-                <div  className="absolute inset-0 flex items-center justify-center p-4 py-5 bg-black/30">
+                <div className="absolute inset-0 flex items-center justify-center p-4 py-5 bg-black/30">
                     <Dialog.Panel className="w-full max-w-[500px] rounded bg-white p-7">
                         <div className='flex items-center justify-between'>
-                            <Dialog.Title className={"text-[17px] font-medium "}>Order #{order.saleNumber}</Dialog.Title>
+                            <div>
+                                <Dialog.Title className={"text-[17px] font-medium "}>Order #{order.saleNumber}</Dialog.Title>
+                                <p className={`${statusDict[status]} px-1.5`}>{status}</p>
+                            </div>
                             <button onClick={() => setOpen(false)} className='outline-none'>
                                 <XMarkIcon className='w-5 cursor-pointer' />
                             </button>
                         </div>
 
                         <div className='mt-12'>
-                            <p className='text-[#333868] text-[15px]'>store name</p>
-                        
-                            <p className='h-0 relative top-1 text-sm text-red-500'>{error && error}</p>
 
-                            <div className='flex items-center justify-end w-full mt-7'>
-                                <button onClick={onClick} className={`group text-white flex items-center justify-center px-6 h-[42px] text-[16px] border-[1.5px] border-black bg-black rounded transition ${loading == false && "hover:bg-white hover:text-black"}`}>
-                                    Mark as delivered
+                            {/* pricing */}
+                            <div>
+                                <p className='text-[#333868] text-[15px]'>Pricing</p>
+                                <div className='bg-[#F5F5F9] py-6 px-5 rounded grid gap-y-3 mt-2.5'>
+                                    <div className='flex items-center justify-between'>
+                                        <p className='text-sm text-[#36363E] font-medium'>Price</p>
+                                        <p className='text-sm text-[#36363E] font-medium'>{order.price}{store?.data.informations[0].data.currency}</p>
+                                    </div>
+                                    <div className='flex items-center justify-between'>
+                                        <p className='text-sm text-[#36363E] font-medium'>Amount</p>
+                                        <p className='text-sm text-[#36363E] font-medium'>{order.amount}</p>
+                                    </div>
+                                    <div className='w-full h-[1px] bg-[#797B8F]'></div>
+                                    <div className='flex items-center justify-end'>
+                                        <p className=' text-black font-semibold'>{order.price * order.amount}{store?.data.informations[0].data.currency}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* email */}
+                            <div className='mt-8'>
+                                <p className='text-[#333868] text-[15px]'>Email</p>
+                                <div className='bg-[#F5F5F9] py-3 px-5 rounded grid gap-y-3 mt-2.5'>
+                                    <p className=''>alkanakdeniz21@gmail.com</p>
+                                </div>
+                            </div>
+
+
+                            {/* address */}
+                            <div className='mt-8'>
+                                <p className='text-[#333868] text-[15px]'>Address</p>
+                                <div className='bg-[#F5F5F9] py-3 px-5 rounded grid gap-y-3 mt-2.5'>
+                                    <p className=''>Brusselstraat 730, Dilbeek 1700</p>
+                                </div>
+
+                                <div className='grid grid-cols-2 gap-x-[15px] mt-4'>
+                                    <div className=''>
+                                        <p className='text-sm text-[#74789F]'>City</p>
+                                        <div className='bg-[#F5F5F9] py-2.5 px-3 w-full rounded mt-0.5 overflow-x-auto text-sm'>
+                                            Dilbeek
+                                        </div>
+                                    </div>
+                                    <div className=''>
+                                        <p className='text-sm text-[#74789F]'>Postal code</p>
+                                        <div className='bg-[#F5F5F9] py-2.5 px-3 w-full rounded mt-0.5 overflow-x-auto text-sm'>
+                                            1700
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+                                <div className='mt-4'>
+                                    <p className='text-sm text-[#74789F]'>State / Province</p>
+                                    <div className='bg-[#F5F5F9] py-2.5 px-3 w-full rounded mt-0.5 overflow-auto text-sm'>
+                                        <span className=''>Vlaams Brabant</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div className='flex items-center justify-between w-full mt-12 flex-col screen-x-500:flex-row'>
+                                <button onClick={() => setStatus("Refunded")} className={`group w-full screen-x-500:w-auto mb-4 screen-x-500:mb-0 text-red-500 flex items-center justify-center px-6 h-[42px] text-[16px] border-[1.5px] border-red-500 bg-white rounded transition ${loading == false && "hover:bg-red-500 hover:text-white"}`}>
+                                    <span>Refund</span>
+                                    <XMarkIcon className='w-4 ml-2.5' />
+                                </button>
+
+                                <button onClick={() => setStatus("Delivered")} className={`group w-full screen-x-500:w-auto text-white flex items-center justify-center px-6 h-[42px] text-[16px] border-[1.5px] border-black bg-black rounded transition ${loading == false && "hover:bg-white hover:text-black"}`}>
+                                    <span>Mark as delivered</span>
+                                    <PaperAirplaneIcon className='w-4 ml-2.5' />
                                 </button>
                             </div>
 

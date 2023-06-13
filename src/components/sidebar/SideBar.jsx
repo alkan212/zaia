@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {
     Bars3Icon,
@@ -10,6 +10,7 @@ import {
     UsersIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
+import { POST } from 'lib/requests'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -23,14 +24,10 @@ export function SideBar({ children, user, setUser }) {
         { name: 'Templates', href: '/templates', icon: FolderIcon, current: false },
     ])
 
-    const [stores, setStores] = useState([
-        { name: 'Heroicons', current: false },
-        { name: 'Tailwind Labs', current: false },
-        { name: 'Workcation', current: false },
-    ])
+    const [stores, setStores] = useState([])
 
 
-    useEffect(() => {
+    let setCurrentStore = useCallback((storesBuffer) => {
         // set active header
         let currentPath = `/${window.location.href.split("/")[window.location.href.split("/").length - 1]}`
 
@@ -52,9 +49,9 @@ export function SideBar({ children, user, setUser }) {
         let currentStore = `${window.location.href.split("/")[window.location.href.split("/").length - 1]}`
         currentStore = decodeURI(currentStore);
 
-        let bufferStores = [...stores]
+        let bufferStores = [...storesBuffer]
 
-        stores.forEach((item, index) => {
+        storesBuffer.forEach((item, index) => {
             if (item.name == currentStore) {
                 bufferStores[index].current = true
             } else {
@@ -65,6 +62,26 @@ export function SideBar({ children, user, setUser }) {
 
         setStores(bufferStores)
     }, [])
+
+
+    useEffect(() => {
+        if (user == null || user == false || user == undefined) return;
+
+        async function fetchData() {
+            let response = await POST("/api/getStores", { userToken: user.token });
+            console.log("r:",response)
+            if (response.success == true) {
+                let buffer = [];
+                response.stores.forEach((store, index) => {
+                    buffer.push({ name: store.name, current: false })
+                })
+                setStores(buffer);
+                setCurrentStore(buffer);
+            }
+        }
+        
+        fetchData();
+    }, [user])
 
 
 
