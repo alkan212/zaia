@@ -30,57 +30,10 @@ const secondaryNavigation = [
 ]
 
 const statuses = {
-    Paid: 'text-green-700 bg-green-50 ring-green-600/20',
+    Delivered: 'text-green-700 bg-green-50 ring-green-600/20',
     Awaiting: 'text-gray-600 bg-gray-50 ring-gray-500/10',
-    Refund: 'text-red-700 bg-red-50 ring-red-600/10',
+    Refunded: 'text-red-700 bg-red-50 ring-red-600/10',
 }
-
-const daysList = [
-    {
-        date: 'Today',
-        dateTime: '2023-03-22',
-        transactions: [
-            {
-                amount: 1,
-                price: 7600,
-                status: 'Paid',
-                date: 1686513855434,
-                saleNumber: 3,
-                icon: ShoppingBagIcon,
-            },
-            {
-                amount: 1,
-                price: 7600,
-                status: 'Awaiting',
-                date: 1686513890578,
-                saleNumber: 2,
-                icon: ShoppingBagIcon,
-            },
-            {
-                amount: 1,
-                price: 7600,
-                status: 'Refund',
-                date: 1686513925073,
-                saleNumber: 1,
-                icon: ShoppingBagIcon,
-            },
-        ],
-    },
-    {
-        date: 'Yesterday',
-        dateTime: '2023-03-21',
-        transactions: [
-            {
-                amount: 2,
-                price: 15400,
-                status: 'Paid',
-                date: 1686513925073,
-                saleNumber: 0,
-                icon: ShoppingBagIcon,
-            },
-        ],
-    },
-]
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -88,6 +41,8 @@ function classNames(...classes) {
 
 
 function getStats(days, array) {
+    if (days == undefined) return
+
     let hours = days * 24;
 
     if (array.length == 0) { return 0 }
@@ -129,6 +84,53 @@ export default function Store({ user, setUser }) {
         { name: 'Convertion rate', value: convertionValue, percent: convertionRate.percent },
     ]
 
+    const [daysList, setDaysList] = useState([
+        {
+            date: 'Today',
+            dateTime: '2023-03-22',
+            transactions: [
+                {
+                    amount: 1,
+                    price: 7600,
+                    status: 'Delivered',
+                    date: 1686513855434,
+                    saleNumber: 3,
+                    icon: ShoppingBagIcon,
+                },
+                {
+                    amount: 1,
+                    price: 7600,
+                    status: 'Awaiting',
+                    date: 1686513890578,
+                    saleNumber: 2,
+                    icon: ShoppingBagIcon,
+                },
+                {
+                    amount: 1,
+                    price: 7600,
+                    status: 'Refunded',
+                    date: 1686513925073,
+                    saleNumber: 1,
+                    icon: ShoppingBagIcon,
+                },
+            ],
+        },
+        {
+            date: 'Yesterday',
+            dateTime: '2023-03-21',
+            transactions: [
+                {
+                    amount: 2,
+                    price: 15400,
+                    status: 'Delivered',
+                    date: 1686513925073,
+                    saleNumber: 0,
+                    icon: ShoppingBagIcon,
+                },
+            ],
+        },
+    ])
+
     useEffect(() => {
         if (user == undefined) return;
 
@@ -149,15 +151,22 @@ export default function Store({ user, setUser }) {
     useEffect(() => {
         if (store == undefined) return;
 
-        let sales = getStats(days, store.last.sales)
-        let revenue = getStats(days, store.last.revenue)
-        let visitors = getStats(days, store.last.visitors)
-        let convertionRate = getStats(days, store.last.convertionRate)
+        if (days !== undefined) {
+            let sales = getStats(days, store.last.sales)
+            let revenue = getStats(days, store.last.revenue)
+            let visitors = getStats(days, store.last.visitors)
+            let convertionRate = getStats(days, store.last.convertionRate)
 
-        setSales(sales)
-        setRevenue(revenue)
-        setVisitors(visitors)
-        setConvertionRate(convertionRate)
+            setSales(sales)
+            setRevenue(revenue)
+            setVisitors(visitors)
+            setConvertionRate(convertionRate)
+        } else {
+            setSales({ value: store.total.sales, percent: undefined })
+            setRevenue({ value: store.total.revenue, percent: undefined })
+            setVisitors({ value: store.total.visitors, percent: undefined })
+            setConvertionRate({ value: (store.total.sales / store.total.visitors) * 100, percent: undefined })
+        }
     }, [store, days])
 
 
@@ -178,9 +187,9 @@ export default function Store({ user, setUser }) {
                         <div className='pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-start justify-between'>
                             <div>
                                 <h1 className='text-3xl font-semibold tracking-wide jost'>{router.query.store}</h1>
-                                <a href='https://zaia-test.com' className='text-sm font-semibold text-gray-500 hover:text-gray-900 oxygen relative'>
+                                <a target="_blank" href={`/shop/${storeName}`} className='text-sm underline underline-offset-4 font-semibold text-gray-500 hover:text-gray-900 oxygen relative'>
                                     <span className='bg-green-400 w-[8px] h-[8px] rounded-full absolute top-1/2 -translate-y-1/2'></span>
-                                    <span className='ml-5 text-[14px]'>{"https://zaia-test.com"}</span>
+                                    <span className='ml-5 text-[14px]'>{`https://zaia.com/shop/${storeName}`}</span>
                                 </a>
                             </div>
                             <Link
@@ -256,8 +265,8 @@ export default function Store({ user, setUser }) {
                             {/* Recent activity table */}
                             <div>
                                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center">
-                                    <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
-                                        Recent activity
+                                    <h2 className="text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
+                                        Last activity
                                     </h2>
 
                                     <button className='px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center ml-6'>
@@ -267,7 +276,7 @@ export default function Store({ user, setUser }) {
                                 </div>
                                 <div className="mt-6 overflow-hidden border-t border-gray-100">
                                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                                        <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+                                        <div className="mx-auto lg:mx-0 lg:max-w-none">
                                             <table className="w-full text-left">
                                                 <thead className="sr-only">
                                                     <tr>
@@ -277,7 +286,7 @@ export default function Store({ user, setUser }) {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {daysList.map((day) => (
+                                                    {daysList.map((day, dayIndex) => (
                                                         <Fragment key={day.dateTime}>
                                                             <tr className="text-sm leading-6 text-gray-900">
                                                                 <th scope="colgroup" colSpan={3} className="relative isolate py-2 font-semibold">
@@ -286,8 +295,8 @@ export default function Store({ user, setUser }) {
                                                                     <div className="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-200 bg-gray-50" />
                                                                 </th>
                                                             </tr>
-                                                            {day.transactions.map((transaction) => (
-                                                                <AcitivityItem key={transaction.id} store={store} router={router} transaction={transaction} />
+                                                            {day.transactions.map((transaction, index) => (
+                                                                <AcitivityItem key={transaction.id} index={index} dayIndex={dayIndex} store={store} router={router} transaction={transaction} daysList={daysList} setDaysList={setDaysList} />
                                                             ))}
                                                         </Fragment>
                                                     ))}
@@ -307,7 +316,7 @@ export default function Store({ user, setUser }) {
 }
 
 
-function AcitivityItem({ store, transaction, router }) {
+function AcitivityItem({ store, transaction, router, index, dayIndex, daysList, setDaysList }) {
 
     const [open, setOpen] = useState(false)
 
@@ -327,7 +336,7 @@ function AcitivityItem({ store, transaction, router }) {
                             <div
                                 className={classNames(
                                     statuses[transaction.status],
-                                    'rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset'
+                                    'rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset transition-all duration-200'
                                 )}
                             >
                                 {transaction.status}
@@ -356,7 +365,7 @@ function AcitivityItem({ store, transaction, router }) {
                             , invoice #{transaction.invoiceNumber}, {transaction.client}
                         </span>
                     </button>
-                    <OrderModal open={open} setOpen={setOpen} router={router} order={transaction} store={store} />
+                    <OrderModal open={open} setOpen={setOpen} router={router} order={transaction} store={store} dayIndex={dayIndex} index={index} daysList={daysList} setDaysList={setDaysList} />
                 </div>
                 <div className="mt-1 text-xs leading-5 text-gray-500">
                     Sale number <span className="text-gray-900">#{transaction.saleNumber}</span>
@@ -370,7 +379,7 @@ function AcitivityItem({ store, transaction, router }) {
 
 const statusDict = { "Awaiting delivery": "bg-yellow-100 text-yellow-800", "Delivered": "bg-green-100 text-green-800", "Refunded": "bg-red-100 text-red-800" }
 
-function OrderModal({ open, setOpen, router, order, store }) {
+function OrderModal({ open, setOpen, router, order, store, dayIndex, index, daysList, setDaysList }) {
 
 
     const [inputFocus, setInputFocus] = useState(true)
@@ -380,29 +389,27 @@ function OrderModal({ open, setOpen, router, order, store }) {
     const [error, setError] = useState(undefined)
     const [status, setStatus] = useState("Awaiting delivery")
 
-    function onFocus(e) {
-        setInputFocus(true)
+    function chansgeStatus(status) {
+        let buffer = [...daysList];
+        buffer[dayIndex].transactions[index].status = status;
+        setDaysList(buffer);
     }
 
-    function onBlur(e) {
-        setInputFocus(false)
-    }
-
-    async function onClick() {
-        if (name == "") { return }
-        setLoading(true)
-        let response = await callback(name);
-        if (response == true) {
-            setSuccess(true)
-
-            setTimeout(() => {
-                router.push("/store/" + name)
-            }, 700)
-        }
-    }
 
     function closeModal() {
-        t.current.click()
+        setOpen(false);
+    }
+
+    function onDelivered() {
+        setStatus("Delivered")
+        chansgeStatus("Delivered")
+        setOpen(false);
+    }
+
+    function onRefunded() {
+        setStatus("Refunded")
+        chansgeStatus("Refunded")
+        setOpen(false);
     }
 
     return (
@@ -424,7 +431,7 @@ function OrderModal({ open, setOpen, router, order, store }) {
                         <div className='flex items-center justify-between'>
                             <div>
                                 <Dialog.Title className={"text-[17px] font-medium "}>Order #{order.saleNumber}</Dialog.Title>
-                                <p className={`${statusDict[status]} px-1.5`}>{status}</p>
+                                <p className={`${statusDict[status]} px-1.5 transition-all duration-200`}>{status}</p>
                             </div>
                             <button onClick={() => setOpen(false)} className='outline-none'>
                                 <XMarkIcon className='w-5 cursor-pointer' />
@@ -483,7 +490,7 @@ function OrderModal({ open, setOpen, router, order, store }) {
                                     </div>
                                 </div>
 
-                                
+
                                 <div className='mt-4'>
                                     <p className='text-sm text-[#74789F]'>State / Province</p>
                                     <div className='bg-[#F5F5F9] py-2.5 px-3 w-full rounded mt-0.5 overflow-auto text-sm'>
@@ -495,12 +502,11 @@ function OrderModal({ open, setOpen, router, order, store }) {
 
 
                             <div className='flex items-center justify-between w-full mt-12 flex-col screen-x-500:flex-row'>
-                                <button onClick={() => setStatus("Refunded")} className={`group w-full screen-x-500:w-auto mb-4 screen-x-500:mb-0 text-red-500 flex items-center justify-center px-6 h-[42px] text-[16px] border-[1.5px] border-red-500 bg-white rounded transition ${loading == false && "hover:bg-red-500 hover:text-white"}`}>
+                                <button onClick={onRefunded} className={`group w-full screen-x-500:w-auto mb-4 screen-x-500:mb-0 text-red-500 flex items-center justify-center px-6 h-[42px] text-[16px] border-[1.5px] border-red-500 bg-white rounded transition ${loading == false && "hover:bg-red-500 hover:text-white"}`}>
                                     <span>Refund</span>
-                                    <XMarkIcon className='w-4 ml-2.5' />
                                 </button>
 
-                                <button onClick={() => setStatus("Delivered")} className={`group w-full screen-x-500:w-auto text-white flex items-center justify-center px-6 h-[42px] text-[16px] border-[1.5px] border-black bg-black rounded transition ${loading == false && "hover:bg-white hover:text-black"}`}>
+                                <button onClick={onDelivered} className={`group w-full screen-x-500:w-auto text-white flex items-center justify-center px-6 h-[42px] text-[16px] border-[1.5px] border-black bg-black rounded transition ${loading == false && "hover:bg-white hover:text-black"}`}>
                                     <span>Mark as delivered</span>
                                     <PaperAirplaneIcon className='w-4 ml-2.5' />
                                 </button>

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "justsmarter",
+  "private_key_id": "b3df09b9c4c7a7b409a7676da5e22a54d3358e7b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDliMvyuwd4xcnT\nrMoth2Qyhhf82y7Y6AX+9ld3Hnzn8Q+nPtF0PyPOrVXRWgNEZXbVV/OwhK8pwV6+\n6/f44hAoe27vdwETloRz5gnoGmxlf63LvZVsssIyREFXShG+y3akrKyXOuuGAmaN\nG2/fOnEUY7+Vl644QLvCiNUesjklNB0t5XoZUHzZOUlqxtkfru5/+6j0JSuswoqP\nxzKVleJLpoCVjzf7eoL/kdxBjTKdfZTNcvz17DhSIqsTJ/4xZrDPQKENTdtI76cR\nKheaWvZfOy5cI2s+3VmEpkPeG51p7vwUwT6pvVz51pRuXfr6/opFnLsEBIWrg/uJ\n0RTkipQRAgMBAAECggEAJd6wrMwywA2nQ5Hp4XfJuOmVd5W/YEYXsdMkPHZT6/3t\nCTjnXHiLsy5h+aJnkOyfSIpe8wFRLQscU1T3RUwhl6xAcf3TuE7zF3QdWk/8ZlqZ\nwAL4GPD9R/HUSKSN0klwulv1ixX2Lyv3jicNXr/I/FuLYRD0y48n60FMIukLXe8F\nMqHEhpNpsb/DNjpaYeOLj70xnQJelszkthoqw0dK7qMFt92KLr3zdMWriIKGI1Tp\nTNrR52p/7QcfxSKTE66TxTqWV9zXhmQNjfOvbo/GeGNU17Fh9lz4+vWFxbjQaFDI\nCZxuXewJQbf0dfmr0LMf5TbPpWFD/E+PMAha9o1vqQKBgQD3gjI2GvIllnRVWjXU\nYama3SBBgRyJQ9syZifCI/HXMgc2WrfJ7dK+0lAlzSKHk0tpghvxKBLkR1F1F+zK\nSqW1zFb7m11GIfgZpgQiWW7kpJl6ls0oBfHCw7FalTSa28xCVcELje+JyEV++xvu\n7blzIY5JZx/MfWKKEllvWvt16wKBgQDtaLzVuAFNx1oGoHqna/o+XEz4HsuPXMcw\nMJgkcQYesIysGdbMIoTAuACo6Glf0SC+lHbZPhQ/5bdCSWaqr3R9F3Brecm0mKMk\nH6fj7skRTIsSCjqFxgXCKUbYITUnPfDXBBuNw2eAUV/RXCGhvPRjgurEeV+t+85u\ndisKD0Vy8wKBgCbDZUnD/piUb7POZQ/WG9H9P8gCiI2W6wWBqkhliMLDOw3wN0iQ\nzqjEF3lUH0xMbUsg7W9fb1YBNWi5ToSAHGPUlOri8kDBoTGjJpKanxuAC+l/JLJX\n+/0c2PHu3EZElkDtXUaJ/DIAA6JXgZBx+tFlN/uXAwvrtzsYlJk0Dp3xAoGAe/WD\nG6g+7giX5fvm7wH/II57FdamfM15p5zH48cr5dxTJw06zU18uU+Z8JehZYlBKqFE\nSPwUAKUGAdNnitmf3izd4xAtFGHaVOM+e1HTpHet6ZZzpiOWICIDPphgM4Qw+2PG\nq0eLBEH44MzVNqj9hfP2du3U2ngu+hgzMsZ0gacCgYEAytnMd9n1k1Ruei46DHBX\n2uhXHurDkkllDqfunjkX3fPxVmcF3qdRLDAMkzfcYKtMwtIJltIW1WpcbvNfBcH6\nUo2KPsnSZS7/HQQWWYzeTaCKemgA2RxG0X1WqZ/pFiZnWteAa0Jg6TrOOkK0DMIA\nXIHfWbYCEtwCcadlIkFVZ3s=\n-----END PRIVATE KEY-----\n",
+  "client_email": "zaia-731@justsmarter.iam.gserviceaccount.com",
+  "client_id": "106907121741890264791",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/zaia-731%40justsmarter.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

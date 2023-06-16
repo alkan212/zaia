@@ -18,7 +18,7 @@ const defaultStoreData = {
 
     total: {
         sales: 3,
-        vistors: 121,
+        visitors: 121,
         revenue: 30,
     },
 
@@ -32,22 +32,39 @@ export default async function handler(req, res) {
         const db = await client.db("zaia");
         const collection = await db.collection("stores");
 
-        let storeName = req.body.storeName;
-        let storeData = req.body.storeData;
-        let storeType = req.body.storeType;
-        let userToken = req.body.userToken;
+        let isExist = await verifyIsNameExist(req.body.storeName, collection)
+        
+        if(isExist == false){
+            let storeName = req.body.storeName;
+            let storeData = req.body.storeData;
+            let storeType = req.body.storeType;
+            let userToken = req.body.userToken;
 
-        await collection.insertOne({
-            "name": storeName,
-            "data": storeData,
-            "type": storeType,
-            "user": userToken,
-            ...defaultStoreData
-        })
+            await collection.insertOne({
+                "name": storeName,
+                "data": storeData,
+                "type": storeType,
+                "user": userToken,
+                ...defaultStoreData
+            })
 
-        res.json({ success: true })
+            res.json({ success: true })
+        }else{
+            res.json({ success: false, error: "This name is already taken" })
+        }
 
     } catch (e) {
         console.error(e);
+    }
+}
+
+
+async function verifyIsNameExist(name, collection) {
+    let store = await collection.findOne({ name: name });
+    console.log("store : ", store)
+    if(store == null){
+        return false
+    }else{
+        return true
     }
 }

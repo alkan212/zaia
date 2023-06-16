@@ -1,5 +1,5 @@
 import { RadioGroup } from "@headlessui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 
 
@@ -12,7 +12,17 @@ export function Template_SizePicker({config, obj}) {
 
     let sizes = obj.data.sizes;
 
-    const [selectedSize, setSelectedSize] = useState(sizes[3])
+    
+    const selectedSizeList = [];
+    sizes.forEach((size, index) => {
+        if(size.value == true){
+            selectedSizeList.push(index)
+        }
+    });
+
+    console.log("sizes", selectedSizeList)
+
+    const [selectedSize, setSelectedSize] = useState(sizes[selectedSizeList[0]])
 
     return (
         <div className="mt-8">
@@ -21,7 +31,7 @@ export function Template_SizePicker({config, obj}) {
             </div>
 
 
-            <RadioGroup  defaultValue={selectedSize.size} onChange={setSelectedSize} className="mt-0">
+            <RadioGroup defaultValue={selectedSize.size} onChange={setSelectedSize} className="mt-0">
                 <RadioGroup.Label className="sr-only"> Choose a size </RadioGroup.Label>
                 <div className="flex flex-row flex-wrap">
                     {sizes.map((size) => (

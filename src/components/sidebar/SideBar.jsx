@@ -2,11 +2,14 @@ import { Fragment, useCallback, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {
     Bars3Icon,
+    BuildingStorefrontIcon,
     CalendarIcon,
     ChartPieIcon,
+    CubeIcon,
     DocumentDuplicateIcon,
     FolderIcon,
     HomeIcon,
+    Square3Stack3DIcon,
     UsersIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
@@ -20,8 +23,8 @@ export function SideBar({ children, user, setUser }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     const [navigation, setNavigation] = useState([
-        { name: 'Stores', href: '/stores', icon: HomeIcon, current: false },
-        { name: 'Templates', href: '/templates', icon: FolderIcon, current: false },
+        { name: 'Stores', href: '/stores', icon: BuildingStorefrontIcon, current: false },
+        { name: 'Templates', href: '/templates', icon: Square3Stack3DIcon, current: false },
     ])
 
     const [stores, setStores] = useState([])
@@ -196,7 +199,7 @@ export function SideBar({ children, user, setUser }) {
                                                                             'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
                                                                         )}
                                                                     >
-                                                                        {store.name[0]}
+                                                                        {store.name[0].toUpperCase()}
                                                                     </span>
                                                                     <span className="truncate">{store.name}</span>
                                                                 </a>
@@ -274,7 +277,7 @@ export function SideBar({ children, user, setUser }) {
                                                             'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
                                                         )}
                                                     >
-                                                        {store.name[0]}
+                                                        {store.name[0].toUpperCase()}
                                                     </span>
                                                     <span className="truncate">{store.name}</span>
                                                 </a>

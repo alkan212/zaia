@@ -78,13 +78,13 @@ export function Component({
     <>
       <div className="" ref={compRef}>
         <input id={componentId} type="checkbox" className='peer/open sr-only' />
-        <div name={data.name} className="group peer-checked/open:max-h-fit min-h-[70px] max-h-0 relative w-full rounded-[8px] bg-white dark:bg-[#171627] overflow-hidden ease-[cubic-bezier(0.165,0.84,0.44,1)]">
+        <div name={data.name} className="group peer-checked/open:max-h-fit min-h-[70px] max-h-0 relative w-full rounded bg-white dark:bg-[#171627] overflow-hidden ease-[cubic-bezier(0.165,0.84,0.44,1)]">
           {/* header */}
-          <div className="pointer-events-none group-hover:w-[90px] duration-200 ease w-[80px] aspect-square absolute left-0 top-0 bg-indigo-500 rounded-full blur-[80px]"></div>
+          <div className="pointer-events-none opacity-20 group-hover:opacity-70 group-hover:w-[90px] duration-200 ease w-[80px] aspect-square absolute left-0 top-0 bg-indigo-500 rounded-full blur-[80px]"></div>
 
           <label htmlFor={componentId} onClick={toggleOpen} onMouseMove={compMouseMove} onMouseDown={compMouseDown} ctype="info" toggle="false" className="unselectable pl-2 pr-7 py-2 relative flex items-center justify-between w-full h-[70px] cursor-pointer relative overflow-hidden">
             <div className="h-full flex items-center">
-              <div className="h-[calc(100%-5px)] ml-0.5 aspect-square rounded-[7px] flex items-center justify-center bg-gradient-to-b from-[#6360EB] to-[#6360EB]">
+              <div className="h-[calc(100%-5px)] ml-0.5 aspect-square rounded-[5px] flex items-center justify-center bg-gradient-to-b from-[#6360EB] to-[#6360EB]">
                 <ImageReact src={icon} alt={""} width={200} height={200} className={"z-[1] h-5 w-5"} />
               </div>
 

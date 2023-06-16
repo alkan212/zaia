@@ -16,7 +16,7 @@ const statuses = {
     Overdue: 'text-red-700 bg-red-50 ring-red-600/10',
 }
 
-export function StoreItem({user, index, stores, setStores, client }) {
+export function StoreItem({ user, index, stores, setStores, client }) {
 
     const router = useRouter()
 
@@ -35,8 +35,8 @@ export function StoreItem({user, index, stores, setStores, client }) {
     }, [])
 
 
-    function onDelete(){
-        POST("/api/deleteStore", {storeName:client.name, userToken:user.token})
+    function onDelete() {
+        POST("/api/deleteStore", { storeName: client.name, userToken: user.token })
 
         let buffer = [...stores];
         buffer.splice(index, 1);
@@ -73,7 +73,8 @@ export function StoreItem({user, index, stores, setStores, client }) {
                             <Menu.Item>
                                 {({ active }) => (
                                     <Link
-                                        href="#"
+                                        data-menu={true}
+                                        href={`/store/${client.name}`}
                                         className={classNames(
                                             active ? 'bg-gray-50' : '',
                                             'block px-3 py-1 text-sm leading-6 text-gray-900'
@@ -86,20 +87,22 @@ export function StoreItem({user, index, stores, setStores, client }) {
                             <Menu.Item>
                                 {({ active }) => (
                                     <Link
+                                        data-menu={true}
                                         href="#"
                                         className={classNames(
                                             active ? 'bg-gray-50' : '',
                                             'block px-3 py-1 text-sm leading-6 text-gray-900'
                                         )}
                                     >
-                                        View<span className="sr-only">, {client.name}</span>
+                                        Visite<span className="sr-only">, {client.name}</span>
                                     </Link>
                                 )}
                             </Menu.Item>
                             <Menu.Item>
                                 {({ active }) => (
                                     <Link
-                                        href="#"
+                                        data-menu={true}
+                                        href={`/creator/${client?.type}?name=${client.name}`}
                                         className={classNames(
                                             active ? 'bg-gray-50' : '',
                                             'block px-3 py-1 text-sm leading-6 text-gray-900'
@@ -112,8 +115,8 @@ export function StoreItem({user, index, stores, setStores, client }) {
                             <Menu.Item>
                                 {({ active }) => (
                                     <button
-                                    data-menu={true}
-                                    onClick={onDelete}
+                                        data-menu={true}
+                                        onClick={onDelete}
                                         className={classNames(
                                             active ? 'bg-gray-50' : '',
                                             'block px-3 py-1 text-sm leading-6 text-red-500 w-full flex items-start'

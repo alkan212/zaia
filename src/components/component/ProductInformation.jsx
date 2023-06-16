@@ -21,8 +21,8 @@ export function ProductInformation({data, product, setProduct}){
         setProduct(newProduct);
     }
     
-
-
+    
+    
     function setName(value){
         setDataInfo("name", value)
     }

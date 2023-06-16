@@ -1,7 +1,13 @@
+import { TrashIcon } from "@heroicons/react/24/outline";
+import { POST } from "lib/requests";
+import { tokenGen } from "lib/tokenGen";
+import { resizeImage } from "lib/utils";
 import React, { useEffect, useState } from "react";
 
 
-export function ImageField({ optionnal = false, callback, defaultValue }) {
+
+
+export function ImageField({ optionnal = false, callback, defaultValue, accept="image/*", recommandedRatio }) {
 
   let imageRef = React.createRef();
 
@@ -52,12 +58,19 @@ export function ImageField({ optionnal = false, callback, defaultValue }) {
       prototypeImg.src = reader.result;
       img.src = reader.result;
       setIsImg(true)
-      { callback && callback(reader.result) }
+
+      resizeImage(reader.result, 1200, 1200, callback);
     };
 
     reader.onerror = function () {
       alert("impossible to charge your image")
     };
+  }
+
+  function onDelete(){
+    imageRef.current.src = "";
+    setIsImg(false);
+    callback(undefined)
   }
 
   useEffect(() => {
@@ -69,6 +82,7 @@ export function ImageField({ optionnal = false, callback, defaultValue }) {
         try {
           setImageSize(ratio, imageRef.current);
           imageRef.current.src = defaultValue;
+          setIsImg(true)
         } catch { }
       }
 
@@ -80,22 +94,23 @@ export function ImageField({ optionnal = false, callback, defaultValue }) {
 
   return (
     <button type="button" className="aspect-[1/1] relative block w-full rounded-lg border-2 border-dashed border-gray-700 text-center hover:border-gray-400 ">
+      <button onClick={onDelete} className="p-2 rounded-full bg-black/20 absolute right-2 top-2 z-[1]">
+        <TrashIcon  className="w-4 h-4 text-white hover:text-red-500"/>
+      </button>
+
       <label htmlFor={fieldId} className="cursor-pointer flex items-center justify-center w-full h-full rounded-lg opacity-100 z-0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <img ref={imageRef} src={""} className="object-cover"></img>
-        <input onInput={setInputImage} id={fieldId} type="file" className="hidden"></input>
+        <input onInput={setInputImage} id={fieldId} type="file" className="hidden" accept={accept}></input>
       </label>
 
       {isImg == false &&
         <div>
           <Icon />
 
-          <span className="z-10 mt-1 block text-sm font-medium text-gray-400">3:2</span>
+          <span className="z-10 mt-1 block text-sm font-medium text-gray-400">{recommandedRatio ?? "3:2"}</span>
           {optionnal && <span className="z-10 mt-1 block text-[13px] font-medium text-gray-600">*Optionnal</span>}
         </div>
       }
-
-
-
     </button>
 
   )

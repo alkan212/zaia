@@ -7,29 +7,47 @@ import { CreatorInformation } from '@/components/CreatorInformation'
 import { CreatorDescription } from '@/components/CreatorDescription'
 
 import { useRouter } from 'next/router'
-import { ArrowLongRightIcon, ArrowRightIcon, CheckIcon, IdentificationIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { ASSIOCIATE_STORE_COMPONENTS, ASSIOCIATE_STORE_TEMPLATE, ASSOCIATE_TEMPLATE } from 'lib/assiociate'
+import { ArrowLeftIcon, ArrowLongRightIcon, ArrowRightIcon, CheckIcon, IdentificationIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { ASSIOCIATE_COMP, ASSIOCIATE_STORE_COMPONENTS, ASSIOCIATE_STORE_TEMPLATE, ASSOCIATE_TEMPLATE } from 'lib/assiociate'
 import { Dialog, Transition } from '@headlessui/react'
 import { CircleSpinner } from 'react-spinners-kit'
 import { POST } from 'lib/requests'
-import { findGetParameter } from 'lib/utils'
+import { findGetParameter, shouldTextBeWhite } from 'lib/utils'
+import { CreatorHeader } from '@/components/CreatorHeader'
+import whiteLogo from "@/images/whiteLogo.svg"
+import ImageReact from "next/image"
 
-
-
-function assiociateComponent(storeData) {
+function assiociateComponent(storeData, router) {
   storeData.informations.forEach((item, index) => {
-    item.comp = ASSIOCIATE_STORE_COMPONENTS[item.name]
-    item.template = ASSIOCIATE_STORE_TEMPLATE[item.name]
+    if (item.name == "Product_Information") {
+      let comp = ASSOCIATE_TEMPLATE[router.query.creator].comp(index);
+      item.comp = comp.comp;
+      item.template = comp.template;
+      item.onCreate = comp.onCreate ?? null;
+      return
+    } else {
+
+
+      let comp = ASSIOCIATE_COMP[item.name](index)
+      item.comp = comp.comp;
+      item.template = comp.template;
+      item.onCreate = comp.onCreate ?? null;
+    }
+
   })
 
   storeData.personalisation.forEach((item, index) => {
-    item.comp = ASSIOCIATE_STORE_COMPONENTS[item.name]
-    item.template = ASSIOCIATE_STORE_TEMPLATE[item.name]
+    let comp = ASSIOCIATE_COMP[item.name](index)
+    item.comp = comp.comp;
+    item.template = comp.template;
+    item.onCreate = comp.onCreate ?? null;
   })
 
   storeData.description.forEach((item, index) => {
-    item.comp = ASSIOCIATE_STORE_COMPONENTS[item.name]
-    item.template = ASSIOCIATE_STORE_TEMPLATE[item.name]
+    let comp = ASSIOCIATE_COMP[item.name](index)
+    item.comp = comp.comp;
+    item.template = comp.template;
+    item.onCreate = comp.onCreate ?? null;
   })
 
   console.log(storeData)
@@ -48,6 +66,7 @@ export default function creator({ user, setUser }) {
   const [nameOpen, setNameOpen] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [storeName, setStoreName] = useState(undefined)
+  const [step, setStep] = useState(0)
 
   // set the template to use
   useEffect(() => {
@@ -73,7 +92,7 @@ export default function creator({ user, setUser }) {
 
       if (response.success == true) {
         let storeData = response.store.data;
-        storeData = assiociateComponent(storeData)
+        storeData = assiociateComponent(storeData, router)
         setProduct(storeData)
         setIsEdit(true)
         setStoreName(storeName)
@@ -85,45 +104,63 @@ export default function creator({ user, setUser }) {
 
 
   async function create(name) {
-    let response = await POST("/api/createStore", { storeName: name, storeData: product, storeType: router.query.creator, userToken: user.token })
+    let newProduct = { ...product };
+
+    try {
+      for (let i = 0; i < product.informations.length; i++) {
+        newProduct = await product.informations[i].onCreate(product);
+      }
+      for (let i = 0; i < product.personalisation.length; i++) {
+        newProduct = await product.personalisation[i].onCreate(product);
+      }
+      for (let i = 0; i < product.description.length; i++) {
+        newProduct = await product.description[i].onCreate(product);
+      }
+
+    } catch (e) {
+    }
+
+    console.log(newProduct)
+    let response = await POST("/api/createStore", { storeName: name, storeData: newProduct, storeType: router.query.creator, userToken: user.token })
 
     if (response.success == true) {
       return true
+    } else {
+      return response.error
     }
   }
 
   async function updateStore() {
-    let response = await POST("/api/updateStore", { storeName: storeName, userToken: user.token, storeData: product })
+    let newProduct = { ...product };
+
+
+    for (let i = 0; i < product.informations.length; i++) {
+      try {
+        console.log(product.informations[i])
+        newProduct = await product.informations[i].onCreate(product);
+      } catch { }
+    }
+
+    for (let i = 0; i < product.personalisation.length; i++) {
+      try {
+        newProduct = await product.personalisation[i].onCreate(product);
+      } catch { }
+    }
+
+    for (let i = 0; i < product.description.length; i++) {
+      try {
+        newProduct = await product.description[i].onCreate(product);
+      } catch { }
+    }
+
+    let response = await POST("/api/updateStore", { storeName: storeName, userToken: user.token, storeData: newProduct })
 
     if (response.success == true) {
       return true
     }
   }
 
-
-  let resize = useCallback(() => {
-    let maxSize = 200
-    let c = document.createElement("canvas")
-    let img = document.createElement("img");
-
-    img.onload = ((e) => {
-      let width = e.currentTarget.width;
-      let height = e.currentTarget.height;
-
-      if (width > height) {
-        let ratio = maxSize / width;
-        let newHeight = height * ratio
-      }
-    })
-
-    img.src = "https://tailwindui.com/img/ecommerce-images/product-page-01-featured-product-shot.jpg"
-
-    c.setAttribute("src", "https://tailwindui.com/img/ecommerce-images/product-page-01-featured-product-shot.jpg");
-    document.body.appendChild(c);
-  }, [])
-
-
-
+  console.log("STEP : ", step)
 
 
   return (
@@ -144,18 +181,38 @@ export default function creator({ user, setUser }) {
           <div className='fixed pb-20  w-full phone:max-w-[400px] xl:max-w-[500px] bg-[#100F1F] overflow-y-auto max-h-[100vh] min-h-[100vh] scrollbar'>
 
             <div className=' bg-[#6360EB] rounded-b-[7px] justify-between items-center phone:space-y-0 px-6 py-8 flex'>
-              <div onClick={() => { isEdit == false ? router.push("/templates") : router.push(`/store/${storeName}`) }} className='flex items-center justify-center bg-black px-8 cursor-pointer rounded-lg py-3.5'>
-                <p className='text-white text-[14px] font-medium mr-1.5 hidden screen-x-500:block'>Cancel</p>
-                <XMarkIcon className='text-white w-5' />
-              </div>
 
-              <CreateButton isEdit={isEdit} router={router} nameOpen={nameOpen} setNameOpen={setNameOpen} create={create} updateStore={updateStore} />
+
+
+              {step == 0 &&
+                <>
+                  <div onClick={() => { isEdit == false ? router.push("/templates") : router.push(`/store/${storeName}`) }} className='flex items-center justify-center bg-black px-8 cursor-pointer rounded-lg py-3.5'>
+                    <p className='text-white text-[14px] font-medium mr-1.5 hidden screen-x-500:block'>Cancel</p>
+                    <XMarkIcon className='text-white w-5' />
+                  </div>
+
+                  <button onClick={() => setStep(1)} className='flex items-center justify-center bg-white px-7 cursor-pointer rounded-lg py-3.5 ml-3'>
+                    <p className='text-black text-[14px] font-bold mr-1.5 '>Next step</p>
+                    <ArrowRightIcon className='text-black w-5' />
+                  </button>
+                </>
+              }
+
+              {step == 1 &&
+                <>
+                  <div onClick={() => { setStep(0) }} className='flex items-center justify-center bg-black px-8 pl-6 cursor-pointer rounded-lg py-3.5'>
+                    <ArrowLeftIcon className='text-white w-5' />
+                    <p className='text-white text-[14px] font-medium ml-1.5 hidden screen-x-500:block'>Go back</p>
+                  </div>
+
+                  <CreateButton isEdit={isEdit} router={router} nameOpen={nameOpen} setNameOpen={setNameOpen} create={create} updateStore={updateStore} />
+                </>
+              }
 
             </div>
 
             <div className='pt-4 px-5'>
-              <button onClick={resize}>Rsize</button>
-              {product &&
+              {step == 0 && product &&
                 <>
                   <CreatorInformation product={product} setProduct={setProduct} />
 
@@ -164,18 +221,58 @@ export default function creator({ user, setUser }) {
                   <CreatorDescription product={product} setProduct={setProduct} />
                 </>
               }
+
+              {step == 1 && product &&
+                <CreatorHeader product={product} setProduct={setProduct} />
+              }
             </div>
           </div>
 
 
-          <div className='hidden phone:block px-10 py-10 w-full flex justify-center min-h-[100vh] max-h-[100vh] overflow-y-auto col-start-2'>
-            <div className='w-full max-w-6xl'>
+          <div className='phone:block w-full flex justify-center min-h-[100vh] max-h-[100vh] overflow-y-auto col-start-2'>
+            {step == 1 &&
+              <div style={{ backgroundColor: product?.header.theme.color }} className={`${product?.header.theme.name == "light" && "border-b border-neutral-300"}`}>
+                <div className='grid grid-cols-2 screen-x-1200:grid-cols-[35%_30%_35%]'>
+                  <div className='hidden screen-x-1200:block'></div>
+
+                  <div className='w-full h-full flex items-center justify-start screen-x-1200:justify-center py-4 pl-7 screen-x-1200:pl-0'>
+                    {product &&
+                      <ImageReact
+                        src={product.header.logo.url}
+                        alt={""}
+                        width={100}
+                        height={100}
+                        className={"z-[1]"}
+                        style={{ width: `${product.header.logo.size}px` }}
+                      />
+                    }
+                  </div>
+                  <div className='w-full h-full flex items-center justify-end screen-x-1200:justify-start pr-7 screen-x-1200:pr-0'>
+                    <svg class={`h-6 mr-5 last-of-type:!mr-0 ${shouldTextBeWhite(product?.header.theme.color) && "text-white" || "text-black"}`} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path>
+                    </svg>
+                    <svg class={`h-6 mr-5 last-of-type:!mr-0 ${shouldTextBeWhite(product?.header.theme.color) && "text-white" || "text-black"}`} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path>
+                    </svg>
+                    <svg class={`h-6 mr-5 last-of-type:!mr-0 ${shouldTextBeWhite(product?.header.theme.color) && "text-white" || "text-black"}`} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path>
+                    </svg>
+                    <svg class={`h-6 mr-5 last-of-type:!mr-0 ${shouldTextBeWhite(product?.header.theme.color) && "text-white" || "text-black"}`} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path>
+                    </svg>
+                    <svg class={`h-6 mr-5 last-of-type:!mr-0 ${shouldTextBeWhite(product?.header.theme.color) && "text-white" || "text-black"}`} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <div className='w-full max-w-6xl px-10 pb-10 mt-4'>
               {Template && product &&
                 cloneElement(Template, { product: product })
               }
             </div>
-
-
           </div>
 
         </main>
@@ -191,10 +288,10 @@ function CreateButton({ isEdit, router, nameOpen, setNameOpen, create, updateSto
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(undefined)
 
-  async function update(){
+  async function update() {
     setLoading(true);
     let response = await updateStore();
-    if(response == true){
+    if (response == true) {
       setSuccess(true)
       setTimeout(() => {
         router.push(`/store/${decodeURI(router.query.name)}`)
@@ -208,9 +305,7 @@ function CreateButton({ isEdit, router, nameOpen, setNameOpen, create, updateSto
         <div onClick={() => setNameOpen(true)} className='flex items-center justify-center bg-white px-7 cursor-pointer rounded-lg py-3.5 ml-3'>
           <p className='text-black text-[14px] font-bold mr-1.5 '>Create your product</p>
           <ArrowRightIcon className='text-black w-5' />
-
           <NameModal callback={create} nameOpen={nameOpen} setNameOpen={setNameOpen} router={router} />
-
         </div>
       }
 
@@ -261,10 +356,16 @@ function NameModal({ callback, nameOpen, setNameOpen, router }) {
     let response = await callback(name);
     if (response == true) {
       setSuccess(true)
-
+      setError(undefined)
       setTimeout(() => {
         router.push("/store/" + name)
       }, 700)
+    } else {
+      setError(response)
+      setLoading(false)
+      setTimeout(() => {
+        setError(undefined)
+      }, 3000);
     }
   }
 
